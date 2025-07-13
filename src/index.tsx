@@ -1,12 +1,12 @@
 import React from "react";
-import {createRoot} from "react-dom/client"
+import { createRoot } from "react-dom/client";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
-import CssBaseline from "@mui/material/CssBaseline"
+import CssBaseline from "@mui/material/CssBaseline";
 import App from "./app/App";
 import reportWebVitals from "./reportWebVitals";
-import {BrowserRouter as Router} from "react-router-dom"
+import { BrowserRouter as Router } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./app/MaterialTheme";
 import ContextProvider from "./app/context/ContextProvider";
@@ -16,13 +16,13 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <ContextProvider>
-      <ThemeProvider theme={theme}>
-        <CssBaseline>
-          <Router>
-            <App />
-          </Router>
-        </CssBaseline>
-      </ThemeProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline>
+            <Router>
+              <App />
+            </Router>
+          </CssBaseline>
+        </ThemeProvider>
       </ContextProvider>
     </Provider>
   </React.StrictMode>,
