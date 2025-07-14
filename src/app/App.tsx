@@ -1,9 +1,11 @@
 import React from "react";
 import { Switch, Route, useLocation } from "react-router-dom";
 import HomeNavbar from "./components/headers/HomeNavbar";
+import Footer from "./components/footer";
 
 import "../css/app.css";
 import "../css/navbar.css";
+import "../css/footer.css";
 
 function App() {
   const location = useLocation();
@@ -17,7 +19,7 @@ function App() {
         <Route path="/help">HelpPage</Route>
         <Route path="/">HomePage</Route>
       </Switch>
-      Footer
+      <Footer />
     </>
   );
 }
