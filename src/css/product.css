@@ -1,0 +1,245 @@
+.products-page {
+  width: 1300px;
+  margin: 0 auto;
+  font-family: "Segoe UI", sans-serif;
+  padding: 40px 20px;
+  background-color: #f9f9fb;
+  position: relative;
+}
+
+/* Page Title */
+.products-page .page-title {
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+/* Top Controls */
+.products-page .top-controls {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.products-page .search-input {
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  width: 220px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border 0.3s;
+}
+.products-page .search-input:focus {
+  border-color: #a17e52;
+}
+
+.products-page .sort-buttons button {
+  background: #333;
+  margin-left: 10px;
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+}
+.products-page .sort-buttons button:hover {
+  background: #a17e52;
+  transform: scale(1.05);
+}
+
+/* Left Genre Filters */
+.products-page .left-filters {
+  position: absolute;
+  top: 180px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.products-page .filter-button {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  background-color: #d5b991;
+  color: #222;
+  font-size: 1.5rem;
+  font-style: italic;
+  font-weight: 600;
+  padding: 12px 10px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.products-page .filter-button:hover {
+  background-color: #a17e52;
+  color: #fff;
+}
+
+/* Grid */
+.products-page .product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  margin-left: 100px;
+}
+
+/* Product Card */
+.products-page .book-card {
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: 0.3s ease;
+}
+.products-page .book-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Image + Hover */
+.products-page .image-wrapper {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  border-radius: 14px;
+}
+.products-page .image-wrapper img {
+  width: 271px;
+  height: 320px;
+  border-radius: 0 20% 0 0;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.products-page .book-card:hover img {
+  transform: scale(1.08);
+}
+.products-page .hover-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Badges */
+
+.products-page .badge {
+  position: absolute;
+  top: 10px;
+  right: 0;
+  display: inline-flex;
+  transform: translateX(-50%);
+  margin-top: 8px;
+  padding: 4px 10px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  border-radius: 12px;
+  color: white;
+  background-color: gray;
+}
+.products-page .badge-hot {
+  background-color: #ff5722;
+}
+.products-page .badge-bestseller {
+  background-color: #3f51b5;
+}
+
+.products-page .book-card:hover .hover-overlay {
+  opacity: 1;
+}
+
+/* Shopping Cart Button */
+.products-page .basket-btn {
+  background: #ffffffcc;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
+}
+.products-page .basket-btn:hover {
+  transform: scale(1.2);
+  background: #fff;
+  box-shadow: 0 0 10px #0002;
+}
+
+/* Card Text */
+.products-page .card-text {
+  text-align: center;
+  padding: 10px 15px 20px;
+}
+.products-page .card-text h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #222;
+  margin: 0;
+}
+.products-page .card-text .author {
+  font-size: 0.95rem;
+  color: #555;
+  margin-top: 5px;
+}
+.products-page .card-text .description {
+  font-size: 0.85rem;
+  color: #777;
+  margin-top: 8px;
+}
+.products-page .card-text .price {
+  font-size: 1rem;
+  color: #ff6f00;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* No Products */
+.products-page .no-products {
+  text-align: center;
+  margin-top: 60px;
+}
+.products-page .no-products img {
+  width: 180px;
+  opacity: 0.6;
+}
+.products-page .no-products p {
+  font-size: 1.4rem;
+  color: #ff6f00;
+  margin-top: 10px;
+}
+
+/* Pagination */
+.products-page .pagination {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.products-page .pagination button {
+  border: none;
+  background: #d5b991;
+  padding: 8px 12px;
+  border-radius: 50%;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.products-page .pagination .active {
+  background: #222;
+  color: white;
+}
+.products-page .pagination button:hover {
+  background: #a17e52;
+  color: white;
+}
