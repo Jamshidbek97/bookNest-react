@@ -117,3 +117,22 @@
     justify-content: center;
   }
 }
+
+/* Other navbar */
+
+.other-navbar {
+  width: 100%;
+  min-height: 60vh;
+  padding: 30px 0;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url("/public/img/background.jpg");
+  background-size: cover;
+  background-position: center;
+  color: white;
+}
+
+.other-navbar .navbar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
