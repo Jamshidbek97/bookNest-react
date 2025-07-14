@@ -1,9 +1,10 @@
 import React from "react";
 import Statistics from "./Statistics";
-import "../../../css/home.css";
 import PopularBooks from "./PopularBooks";
 import NewBooks from "./NewBooks";
 import BookOfTheMonth from "./BookOfTheMonth";
+import SpotlightMembers from "./SpotlightMembers";
+import "../../../css/home.css";
 
 export default function HomePage() {
   return (
@@ -12,6 +13,7 @@ export default function HomePage() {
       <PopularBooks />
       <NewBooks />
       <BookOfTheMonth />
+      <SpotlightMembers />
     </div>
   );
 }
