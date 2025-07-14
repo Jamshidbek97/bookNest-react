@@ -3,6 +3,7 @@ import Statistics from "./Statistics";
 import "../../../css/home.css";
 import PopularBooks from "./PopularBooks";
 import NewBooks from "./NewBooks";
+import BookOfTheMonth from "./BookOfTheMonth";
 
 export default function HomePage() {
   return (
@@ -10,6 +11,7 @@ export default function HomePage() {
       <Statistics />
       <PopularBooks />
       <NewBooks />
+      <BookOfTheMonth />
     </div>
   );
 }

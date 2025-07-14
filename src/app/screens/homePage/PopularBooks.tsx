@@ -1,75 +1,118 @@
 import React from "react";
+import {
+  Box,
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  IconButton,
+} from "@material-ui/core";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
-const books = [
+const popularBooks = [
   {
-    _id: "686eb04726452961595003da",
-    title: "To Kill a Mockingbird",
-    author: "Harper Lee",
+    _id: "1",
+    title: "The Midnight Library",
+    author: "Matt Haig",
     genre: "FICTION",
-    price: 20,
+    price: 19,
+    bookLikes: 22,
     coverImages: ["img/default-book.jpg"],
   },
   {
     _id: "2",
-    title: "1984",
-    author: "George Orwell",
-    genre: "DYSTOPIAN",
-    price: 18,
+    title: "Atomic Habits",
+    author: "James Clear",
+    genre: "SELF-HELP",
+    price: 25,
+    bookLikes: 8,
     coverImages: ["img/default-book.jpg"],
   },
   {
     _id: "3",
-    title: "Pride and Prejudice",
-    author: "Jane Austen",
-    genre: "ROMANCE",
-    price: 22,
+    title: "Educated",
+    author: "Tara Westover",
+    genre: "MEMOIR",
+    price: 21,
+    bookLikes: 31,
     coverImages: ["img/default-book.jpg"],
   },
   {
     _id: "4",
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    genre: "CLASSIC",
-    price: 15,
+    title: "Dune",
+    author: "Frank Herbert",
+    genre: "SCI-FI",
+    price: 24,
+    bookLikes: 10,
     coverImages: ["img/default-book.jpg"],
   },
 ];
 
 export default function PopularBooks() {
   return (
-    <div className="popular-books">
-      <h2 className="section-title">🔥 Popular Books</h2>
-      <div className="book-card-container">
-        {books.map((book) => (
-          <div className="book-card" key={book._id}>
-            <div className="image-wrapper">
-              <img
-                className="book-cover"
-                src={`/${book.coverImages[0]}`}
-                alt={book.title}
-              />
-              <div className="hover-icons">
-                <span className="icon left" title="Like">
-                  ❤️
-                </span>
-                <span className="icon center" title="Add to cart">
-                  🛒
-                </span>
-                <span className="icon right" title="View">
-                  👁️
-                </span>
-              </div>
-            </div>
-            <div className="book-info">
-              <h3>{book.title}</h3>
-              <p className="author">{book.author}</p>
-              <p className="genre">{book.genre}</p>
-              <p className="price">${book.price}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+    <Box className="popular-books">
+      <Typography
+        variant="h4"
+        align="center"
+        style={{ marginBottom: 40, fontWeight: 600 }}
+      >
+        ⭐ Popular Books
+      </Typography>
+      <Box className="book-card-container">
+        {popularBooks.map((book) => {
+          const imageSrc =
+            book?.coverImages && book.coverImages.length > 0
+              ? `/${book.coverImages[0]}`
+              : "/img/default-book.jpg";
+
+          return (
+            <Card className="book-card-popular" key={book._id} elevation={5}>
+              <Box position="relative">
+                <CardMedia
+                  component="img"
+                  height="360"
+                  image={imageSrc}
+                  alt={book.title}
+                  className="book-img"
+                />
+                {book.bookLikes > 15 && (
+                  <Box className="badge-top-right">🏆 Bestseller</Box>
+                )}
+                <Box className="mui-vertical-icons">
+                  <IconButton className="mui-icon-vertical" aria-label="like">
+                    <FavoriteIcon />
+                  </IconButton>
+                  <IconButton className="mui-icon-vertical" aria-label="cart">
+                    <ShoppingCartIcon />
+                  </IconButton>
+                  <IconButton className="mui-icon-vertical" aria-label="view">
+                    <VisibilityIcon />
+                  </IconButton>
+                </Box>
+              </Box>
+              <CardContent>
+                <Typography variant="h6" style={{ fontWeight: 600 }}>
+                  {book.title}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  {book.author}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  {book.genre}
+                </Typography>
+                <Typography
+                  variant="subtitle1"
+                  style={{ fontWeight: 600, marginTop: 8 }}
+                >
+                  ${book.price}
+                </Typography>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </Box>
+    </Box>
   );
 }

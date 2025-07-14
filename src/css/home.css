@@ -51,19 +51,11 @@
 
 /* PopularBooks */
 .homepage .popular-books {
+  background: linear-gradient(120deg, #e0e0ff, #ffffff);
   padding: 80px 20px;
-  background-color: #fafafa;
 }
 
-.homepage .popular-books .section-title {
-  font-size: 2.5rem;
-  text-align: center;
-  color: #2c2c2c;
-  margin-bottom: 60px;
-  font-weight: 600;
-}
-
-.homepage .popular-books .book-card-container {
+.homepage .book-card-container {
   max-width: 1350px;
   margin: 0 auto;
   display: flex;
@@ -72,101 +64,58 @@
   gap: 40px;
 }
 
-.homepage .popular-books .book-card {
+.homepage .book-card-popular {
   width: 300px;
-  background-color: #fff;
-  border-radius: 16px;
+  border-radius: 12px;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  cursor: pointer;
+  transition: transform 0.4s ease, box-shadow 0.3s ease;
   position: relative;
 }
 
-.homepage .popular-books .book-card:hover {
-  transform: translateY(-10px) scale(1.03);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+.homepage .book-card-popular:hover {
+  transform: scale(1.03) rotateZ(-0.5deg);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
 }
 
-.homepage .popular-books .image-wrapper {
-  position: relative;
-  width: 100%;
-  height: 360px;
-  overflow: hidden;
-}
-
-.homepage .popular-books .book-cover {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.3s ease;
-}
-
-.homepage .popular-books .book-card:hover .book-cover {
-  transform: scale(1.05);
-}
-
-.homepage .popular-books .hover-icons {
+.homepage .mui-vertical-icons {
   position: absolute;
-  bottom: 16px;
-  left: 0;
-  right: 0;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
   display: flex;
-  justify-content: space-between;
-  padding: 0 16px;
+  flex-direction: column;
+  gap: 10px;
   opacity: 0;
   transition: opacity 0.3s ease;
-  pointer-events: none;
 }
 
-.homepage .popular-books .book-card:hover .hover-icons {
+.homepage .book-card-popular:hover .mui-vertical-icons {
   opacity: 1;
-  pointer-events: auto;
 }
 
-.homepage .popular-books .icon {
-  background-color: rgba(255, 255, 255, 0.85);
+.homepage .mui-icon-vertical {
+  background-color: #fff;
   border-radius: 50%;
   padding: 8px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.homepage .popular-books .icon:hover {
+.homepage .mui-icon-vertical:hover {
   transform: scale(1.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
-.homepage .popular-books .book-info {
-  padding: 16px 20px;
-  text-align: center;
-}
-
-.homepage .popular-books .book-info h3 {
-  font-size: 1.2rem;
-  margin: 0;
-  color: #222;
-  font-weight: 600;
-}
-
-.homepage .popular-books .author {
-  font-size: 0.95rem;
-  color: #777;
-  margin-top: 6px;
-}
-
-.homepage .popular-books .genre {
-  font-size: 0.9rem;
-  color: #999;
-  margin-top: 4px;
-}
-
-.homepage .popular-books .price {
-  margin-top: 10px;
-  font-size: 1.1rem;
+.homepage .badge-top-right {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background-color: #2196f3;
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 14px;
+  font-size: 1rem;
   font-weight: bold;
-  color: #d6b77c;
+  z-index: 2;
 }
 
 /* New Books */
@@ -237,4 +186,89 @@
   font-weight: bold;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   z-index: 1;
+}
+
+/* Book Of The Month */
+.homepage .book-of-the-month {
+  max-width: 1350px;
+  margin: 60px auto;
+  padding: 20px;
+}
+
+.homepage .book-of-the-month .book-month-card {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  padding: 30px;
+  background-color: #fdfdfd;
+  border-radius: 16px;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.homepage .book-of-the-month .book-month-card:hover {
+  transform: scale(1.01);
+}
+
+.homepage .book-of-the-month .cover {
+  width: 220px;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.homepage .book-of-the-month .cover-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.homepage .book-of-the-month .badge {
+  position: absolute;
+  width: 85%;
+  bottom: 20px;
+  display: inline-flex;
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+  font-weight: 600;
+  color: #fff;
+  background-color: #f44336;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 16px;
+  z-index: 1;
+}
+
+.homepage .book-of-the-month .right {
+  flex: 1;
+}
+
+.homepage .book-of-the-month .title {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.homepage .book-of-the-month .author {
+  font-style: italic;
+  margin-bottom: 16px;
+  color: #555;
+}
+
+.homepage .book-of-the-month .desc {
+  margin-bottom: 20px;
+  color: #444;
+  line-height: 1.6;
+}
+
+.homepage .book-of-the-month .price {
+  font-weight: 600;
+  color: #1976d2;
+  margin-bottom: 20px;
+}
+
+.homepage .book-of-the-month .cta-button {
+  text-transform: none;
+  font-weight: 600;
 }
