@@ -6,6 +6,7 @@ import OtherNavbar from "./components/headers/OtherNavbar";
 import "../css/app.css";
 import "../css/navbar.css";
 import "../css/footer.css";
+import HomePage from "./screens/homePage";
 
 function App() {
   const location = useLocation();
@@ -17,7 +18,9 @@ function App() {
         <Route path="/orders">OrderPage</Route>
         <Route path="/member-page">UserPage</Route>
         <Route path="/help">HelpPage</Route>
-        <Route path="/">HomePage</Route>
+        <Route path="/">
+          <HomePage />
+        </Route>
       </Switch>
       <Footer />
     </>
