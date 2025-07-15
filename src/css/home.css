@@ -1,0 +1,367 @@
+/* Statistics */
+.homepage .homepage-statistics {
+  background-color: #2f2f2f;
+
+  color: #d6b77c;
+  padding: 60px 20px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+  border-bottom: 2px solid #fff;
+}
+
+.homepage .homepage-statistics .stat-box {
+  position: relative;
+  max-width: 1300px;
+  text-align: center;
+  padding: 0 30px;
+  min-width: 120px;
+}
+
+.homepage .homepage-statistics .stat-value {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.homepage .homepage-statistics .stat-label {
+  margin-top: 6px;
+  color: #f0dcb3;
+}
+
+.homepage .homepage-statistics .vertical-line {
+  position: absolute;
+  right: -15px;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background-color: #d6b77c;
+}
+
+@media (max-width: 600px) {
+  .homepage .homepage-statistics {
+    flex-direction: column;
+  }
+
+  .homepage .homepage-statistics .vertical-line {
+    display: none;
+  }
+}
+
+/* PopularBooks */
+.homepage .popular-books {
+  background: linear-gradient(120deg, #e0e0ff, #ffffff);
+  padding: 80px 20px;
+}
+
+.homepage .book-card-container {
+  max-width: 1350px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.homepage .book-card-popular {
+  width: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.4s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.homepage .book-card-popular:hover {
+  transform: scale(1.03) rotateZ(-0.5deg);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+}
+
+.homepage .mui-vertical-icons {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.homepage .book-card-popular:hover .mui-vertical-icons {
+  opacity: 1;
+}
+
+.homepage .mui-icon-vertical {
+  background-color: #fff;
+  border-radius: 50%;
+  padding: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.homepage .mui-icon-vertical:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.homepage .badge-top-right {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background-color: #2196f3;
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: bold;
+  z-index: 2;
+}
+
+/* New Books */
+.homepage .new-books {
+  background-color: #f0f0f5;
+  padding: 80px 20px;
+}
+
+.homepage .book-card-container {
+  max-width: 1350px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.homepage .book-card-mui {
+  width: 300px;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  text-align: center;
+}
+
+.homepage .book-card-mui:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.homepage .mui-hover-icons {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-evenly;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.homepage .book-card-mui:hover .mui-hover-icons {
+  opacity: 1;
+}
+
+.homepage .mui-icon {
+  background-color: #fff;
+  border-radius: 50%;
+  padding: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.homepage .mui-icon:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.homepage .badge-top-left {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background-color: crimson;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* Book Of The Month */
+.homepage .book-of-the-month {
+  max-width: 1350px;
+  margin: 60px auto;
+  padding: 20px;
+}
+
+.homepage .book-of-the-month .book-month-card {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  padding: 30px;
+  background-color: #fdfdfd;
+  border-radius: 16px;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.homepage .book-of-the-month .book-month-card:hover {
+  transform: scale(1.01);
+}
+
+.homepage .book-of-the-month .cover {
+  width: 220px;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.homepage .book-of-the-month .cover-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.homepage .book-of-the-month .badge {
+  position: absolute;
+  width: 85%;
+  bottom: 20px;
+  display: inline-flex;
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+  font-weight: 600;
+  color: #fff;
+  background-color: #f44336;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 16px;
+  z-index: 1;
+}
+
+.homepage .book-of-the-month .right {
+  flex: 1;
+}
+
+.homepage .book-of-the-month .title {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.homepage .book-of-the-month .author {
+  font-style: italic;
+  margin-bottom: 16px;
+  color: #555;
+}
+
+.homepage .book-of-the-month .desc {
+  margin-bottom: 20px;
+  color: #444;
+  line-height: 1.6;
+}
+
+.homepage .book-of-the-month .price {
+  font-weight: 600;
+  color: #1976d2;
+  margin-bottom: 20px;
+}
+
+.homepage .book-of-the-month .cta-button {
+  text-transform: none;
+  font-weight: 600;
+}
+
+/* Spotlight Members */
+
+.homepage .spotlight-section {
+  padding: 60px 20px;
+  background-color: #fff9f2;
+  text-align: center;
+}
+
+.homepage .spotlight-section .section-title {
+  font-size: 2rem;
+  margin-bottom: 40px;
+}
+
+.homepage .spotlight-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.homepage .spotlight-card {
+  width: 220px;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s;
+}
+
+.homepage .spotlight-card:hover {
+  transform: translateY(-5px);
+}
+
+.homepage .image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+.homepage .image-wrapper img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-position: center;
+}
+
+.homepage .badge {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ff6f61;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* CTA */
+.homepage .call-to-action {
+  background: linear-gradient(120deg, #f0f4ff, #eaf6ff);
+  padding: 60px 0;
+  margin: 80px auto;
+  border-radius: 16px;
+}
+
+.homepage .call-to-action .cta-box {
+  text-align: left;
+}
+
+.homepage .call-to-action .cta-text h4 {
+  font-size: 2rem;
+  color: #1a237e;
+}
+
+.homepage .call-to-action .cta-text p {
+  color: #555;
+  font-size: 1rem;
+}
+
+.homepage .call-to-action .cta-button {
+  font-weight: 600;
+  text-transform: none;
+  padding: 12px 24px;
+}
