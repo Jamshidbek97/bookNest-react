@@ -1,85 +1,127 @@
-import { Box, Typography, IconButton } from "@mui/material";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import { Box, Typography, Stack } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Navigation, Pagination } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
-import SwiperCore from "swiper";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 
-SwiperCore.use([]);
-
-const mockRecommendations = [
+const recommendations = [
   {
-    title: "1984",
-    author: "George Orwell",
-    cover: "/img/default-book.jpg",
-    price: 18,
+    title: "Hot Discount Days",
+    subtitle: "Each Friday we deliver highest discounts",
+    image: "/img/default-book.jpg",
+    badge: "Hot",
+    author: "Chef Deming",
+    time: "30 min ago",
+    location: "Turkey, Istanbul",
   },
   {
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    cover: "/img/default-book.jpg",
-    price: 15,
+    title: "Join us on sns",
+    subtitle: "We are offering healthy book topics on sns",
+    image: "/img/default-book.jpg",
+    badge: "New",
+    author: "Belissimo Agent",
+    time: "A week ago",
+    location: "Europe, France",
   },
   {
-    title: "Brave New World",
-    author: "Aldous Huxley",
-    cover: "/img/default-book.jpg",
-    price: 17,
-  },
-  {
-    title: "The Catcher in the Rye",
-    author: "J.D. Salinger",
-    cover: "/img/default-book.jpg",
-    price: 16,
+    title: "New Project Launch",
+    subtitle: "New books are arriving this month",
+    image: "/img/default-book.jpg",
+    badge: "Popular",
+    author: "Morgan News",
+    time: "5 days ago",
+    location: "USA, Florida",
   },
 ];
 
 export default function Recommendations() {
   return (
-    <Box className="homepage recommendations">
-      <Typography variant="h5" fontWeight={600} mb={3}>
-        You May Also Like
-      </Typography>
+    <div className="events-frame">
+      <Stack className="events-main">
+        <Box className="events-text">
+          <span className="category-title">You may also Like</span>
+        </Box>
 
-      <Swiper
-        spaceBetween={20}
-        slidesPerView={1.2}
-        breakpoints={{
-          600: { slidesPerView: 2 },
-          900: { slidesPerView: 3 },
-          1200: { slidesPerView: 4 },
-        }}
-      >
-        {mockRecommendations.map((book, idx) => (
-          <SwiperSlide key={idx}>
-            <Box className="recommendation-card">
-              <Box className="card-image">
-                <img src={book.cover} alt={book.title} />
-                <Box className="card-icons">
-                  <IconButton className="icon-button">
-                    <FavoriteBorderIcon />
-                  </IconButton>
-                  <IconButton className="icon-button">
-                    <ShoppingCartIcon />
-                  </IconButton>
-                  <IconButton className="icon-button">
-                    <VisibilityIcon />
-                  </IconButton>
-                </Box>
-              </Box>
-              <Box className="card-info">
-                <Typography className="book-title">{book.title}</Typography>
-                <Typography className="book-author">
-                  by {book.author}
-                </Typography>
-                <Typography className="book-price">${book.price}</Typography>
-              </Box>
-            </Box>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </Box>
+        <div className="events-swiper-wrapper">
+          <Swiper
+            modules={[Autoplay, Navigation, Pagination]}
+            className="events-info"
+            slidesPerView={3}
+            centeredSlides={true}
+            spaceBetween={30}
+            loop={true}
+            navigation={{
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            }}
+            pagination={{
+              el: ".swiper-pagination",
+              clickable: true,
+            }}
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: false,
+            }}
+            speed={800}
+          >
+            {recommendations.map((value, index) => (
+              <SwiperSlide key={index}>
+                <div className="events-card">
+                  <div className="events-img-wrapper">
+                    <img
+                      src={value.image}
+                      alt={value.title}
+                      className="events-img"
+                    />
+                    <span className="events-badge">{value.badge}</span>
+                  </div>
+
+                  <Box className="events-desc">
+                    <Typography className="rec-title">{value.title}</Typography>
+                    <Typography className="rec-subtitle">
+                      {value.subtitle}
+                    </Typography>
+
+                    <Box className="event-organizator">
+                      <PersonOutlineIcon fontSize="small" />
+                      <span className="spec-text-author">{value.author}</span>
+                    </Box>
+
+                    <Box className="bott-info">
+                      <Box className="bott-info-main">
+                        <AccessTimeIcon fontSize="small" />
+                        <span>{value.time}</span>
+                      </Box>
+                      <Box className="bott-info-main">
+                        <LocationOnIcon fontSize="small" />
+                        <span>{value.location}</span>
+                      </Box>
+                    </Box>
+                  </Box>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+
+        <Box className="prev-next-frame">
+          <img
+            src="/icons/arrow-right.svg"
+            className="swiper-button-prev"
+            alt="Previous"
+          />
+          <div className="dot-frame-pagination swiper-pagination"></div>
+          <img
+            src="/icons/arrow-right.svg"
+            className="swiper-button-next"
+            style={{ transform: "rotate(-180deg)" }}
+            alt="Next"
+          />
+        </Box>
+      </Stack>
+    </div>
   );
 }

@@ -246,86 +246,115 @@
 
 /* Recommendation */
 
-.products .recommendations {
+.products .events-frame {
   max-width: 1300px;
-  margin: 80px auto;
+  margin: 100px auto;
   padding: 0 20px;
 }
 
-.products .recommendation-card {
-  background: #fff;
-  border-radius: 12px;
+.products .events-main {
+  gap: 40px;
+}
+
+.products .events-text .category-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.products .events-card {
+  background-color: #fff;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-  height: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.4s ease;
 }
 
-.products .recommendation-card:hover {
-  transform: translateY(-5px);
+.products .events-card:hover {
+  transform: scale(1.04);
 }
 
-.products .recommendation-card .card-image {
+.products .events-img-wrapper {
   position: relative;
+  height: 340px;
   overflow: hidden;
-  height: 260px;
-  background-color: #f9f9f9;
 }
 
-.products .recommendation-card .card-image img {
+.products .events-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-.products .recommendation-card .card-icons {
+.products .events-badge {
   position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 12px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.products .recommendation-card:hover .card-icons {
-  opacity: 1;
-}
-
-.products .recommendation-card .icon-button {
-  background-color: #fff;
-  border-radius: 50%;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  color: #333;
-  transition: background-color 0.3s ease, transform 0.2s;
-}
-
-.products .recommendation-card .icon-button:hover {
-  background-color: #1976d2;
+  top: 12px;
+  left: 12px;
+  background-color: #f44336;
   color: white;
-  transform: scale(1.1);
+  font-size: 14px;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 20px;
 }
 
-.products .recommendation-card .card-info {
-  padding: 16px;
-  text-align: center;
+.products .events-desc {
+  padding: 18px 20px;
 }
 
-.products .recommendation-card .book-title {
-  font-weight: 600;
+.products .rec-title {
   font-size: 1.1rem;
-}
-
-.products .recommendation-card .book-author {
-  color: #777;
-  font-size: 0.9rem;
-  margin: 4px 0;
-}
-
-.products .recommendation-card .book-price {
-  color: #1976d2;
   font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.products .rec-subtitle {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.products .event-organizator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  color: #444;
+  margin-bottom: 12px;
+}
+
+.products .bott-info {
+  display: flex;
+  gap: 20px;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.products .bott-info-main {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.products .prev-next-frame {
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+
+.products .prev-next-frame img {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.products .dot-frame-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Location */

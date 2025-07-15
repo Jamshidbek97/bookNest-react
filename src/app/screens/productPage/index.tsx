@@ -3,6 +3,7 @@ import { Switch, Route, useRouteMatch } from "react-router-dom";
 import Products from "./Products";
 import "../../../css/product.css";
 import Recommendations from "./Recommendation";
+import Location from "./Location";
 
 // import { CartItem } from "../../../lib/types/search";
 
@@ -19,7 +20,8 @@ export default function ProductsPage() {
         <Route>
           <Products />
           <Recommendations />
-          Board RestaurantLocation
+
+          <Location />
         </Route>
       </Switch>
     </div>
