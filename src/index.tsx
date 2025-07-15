@@ -14,17 +14,17 @@ import "./css/index.css";
 
 ReactDOM.render(
   <React.StrictMode>
-    {/* <Provider store={store}> */}
-    {/* <ContextProvider> */}
-    <ThemeProvider theme={theme}>
-      <CssBaseline>
-        <Router>
-          <App />
-        </Router>
-      </CssBaseline>
-    </ThemeProvider>
-    {/* </ContextProvider> */}
-    {/* </Provider> */}
+    <Provider store={store}>
+      <ContextProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline>
+            <Router>
+              <App />
+            </Router>
+          </CssBaseline>
+        </ThemeProvider>
+      </ContextProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );

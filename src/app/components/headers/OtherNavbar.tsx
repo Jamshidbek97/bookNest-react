@@ -17,6 +17,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { useState } from "react";
+import Basket from "./Basket";
 
 export default function OtherNavbar() {
   const history = useHistory();
@@ -117,6 +118,7 @@ export default function OtherNavbar() {
             <StyledNavLink to="/help" activeClassName="underline">
               <SupportAgentIcon fontSize="small" /> Support
             </StyledNavLink>
+            <Basket />
             <FormControlLabel
               control={
                 <Switch
