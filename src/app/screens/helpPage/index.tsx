@@ -3,7 +3,6 @@ import {
   Tabs,
   Tab,
   TextField,
-  Button,
   Select,
   MenuItem,
   FormControl,
@@ -16,60 +15,9 @@ import {
   Phone,
   AccessTime,
 } from "@mui/icons-material";
+import { faq } from "../../../lib/data/faq";
+import { terms } from "../../../lib/data/terms";
 import "../../../css/helpPage.css";
-
-const terms = [
-  {
-    icon: "🛒",
-    title: "Order Requirements",
-    description:
-      "You must register and verify your account to place orders and use communication features.",
-  },
-  {
-    icon: "❌",
-    title: "Cancellation Policy",
-    description:
-      "Orders cannot be cancelled after payment. Please double-check your order before submission.",
-  },
-  {
-    icon: "📢",
-    title: "Advertising Rules",
-    description:
-      "Personal ads require admin permission. Unauthorized ads are not allowed.",
-  },
-  {
-    icon: "🔒",
-    title: "Monitoring & Compliance",
-    description:
-      "All user actions are monitored. Please follow community guidelines.",
-  },
-];
-
-const faq = [
-  {
-    icon: "🚚",
-    question: "How long does delivery take?",
-    answer:
-      "Standard delivery takes 3–5 business days. Express shipping is available at extra cost.",
-  },
-  {
-    icon: "📍",
-    question: "Can I track my order?",
-    answer: "Yes, tracking info is sent to your email once dispatched.",
-  },
-  {
-    icon: "🌐",
-    question: "Do you offer international shipping?",
-    answer:
-      "Yes, we ship to many countries. Shipping costs are calculated at checkout.",
-  },
-  {
-    icon: "↩️",
-    question: "What is your return policy?",
-    answer:
-      "Returns are accepted within 30 days if items are unused and in original packaging.",
-  },
-];
 
 export default function HelpPage() {
   const [tab, setTab] = useState(0);
@@ -111,6 +59,7 @@ export default function HelpPage() {
               className="search-input"
               placeholder="Search..."
             />
+            <Search />
           </div>
 
           <div className="tabs-container">
