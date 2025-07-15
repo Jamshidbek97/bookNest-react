@@ -20,7 +20,7 @@ import { useState } from "react";
 
 export default function HomeNavbar() {
   const history = useHistory();
-  const authMember = false; // Replace this with real auth logic
+  const authMember = true; // Replace this with real auth logic
   const [darkMode, setDarkMode] = useState(false);
 
   const StyledNavLink = styled(NavLink)(({ theme }) => ({

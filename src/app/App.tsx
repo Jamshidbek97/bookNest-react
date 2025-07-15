@@ -9,6 +9,7 @@ import "../css/footer.css";
 import HomePage from "./screens/homePage";
 import ProductsPage from "./screens/productPage";
 import HelpPage from "./screens/helpPage";
+import MyPage from "./components/myPage";
 
 function App() {
   const location = useLocation();
@@ -20,7 +21,9 @@ function App() {
           <ProductsPage />
         </Route>
         <Route path="/orders">OrderPage</Route>
-        <Route path="/member-page">UserPage</Route>
+        <Route path="/member-page">
+          <MyPage />
+        </Route>
         <Route path="/help">
           <HelpPage />
         </Route>
