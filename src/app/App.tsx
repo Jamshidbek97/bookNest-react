@@ -10,6 +10,7 @@ import HomePage from "./screens/homePage";
 import ProductsPage from "./screens/productPage";
 import HelpPage from "./screens/helpPage";
 import MyPage from "./components/myPage";
+import OrderPage from "./components/orderPage";
 
 function App() {
   const location = useLocation();
@@ -20,7 +21,9 @@ function App() {
         <Route path="/products">
           <ProductsPage />
         </Route>
-        <Route path="/orders">OrderPage</Route>
+        <Route path="/orders">
+          <OrderPage />
+        </Route>
         <Route path="/member-page">
           <MyPage />
         </Route>
