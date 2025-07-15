@@ -4,6 +4,7 @@ import Products from "./Products";
 import "../../../css/product.css";
 import Recommendations from "./Recommendation";
 import Location from "./Location";
+import Testimonials from "./Testimonials";
 
 // import { CartItem } from "../../../lib/types/search";
 
@@ -20,7 +21,7 @@ export default function ProductsPage() {
         <Route>
           <Products />
           <Recommendations />
-
+          <Testimonials />
           <Location />
         </Route>
       </Switch>
