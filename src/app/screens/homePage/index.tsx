@@ -5,6 +5,7 @@ import NewBooks from "./NewBooks";
 import BookOfTheMonth from "./BookOfTheMonth";
 import SpotlightMembers from "./SpotlightMembers";
 import "../../../css/home.css";
+import CallToAction from "./CTA";
 
 export default function HomePage() {
   return (
@@ -14,6 +15,7 @@ export default function HomePage() {
       <NewBooks />
       <BookOfTheMonth />
       <SpotlightMembers />
+      <CallToAction />
     </div>
   );
 }
