@@ -1,0 +1,284 @@
+.help-page {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding-top: 0;
+  padding-bottom: 60px; /* Add space below */
+  box-sizing: border-box;
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.help-page .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #fff;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+  padding-bottom: 60px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.help-page .main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #fff;
+  min-height: 100vh;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+}
+
+.help-page .header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 80px 40px 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.help-page .header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 200'><path d='M0,100 C150,200 350,0 500,100 C650,200 850,0 1000,100 L1000,200 L0,200 Z' fill='rgba(255,255,255,0.1)'/></svg>");
+  background-size: cover;
+  background-position: bottom;
+}
+
+.help-page .header-content {
+  position: relative;
+  z-index: 2;
+}
+
+.help-page .header-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  opacity: 0.9;
+}
+
+.help-page .header-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.help-page .header-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.help-page .search-section,
+.help-page .tabs-container,
+.help-page .content-container {
+  background: white;
+  padding: 40px;
+}
+
+.help-page .search-input .MuiOutlinedInput-root {
+  border-radius: 25px;
+  background-color: #f8f9fa;
+}
+
+.help-page .search-input .MuiOutlinedInput-root:hover fieldset {
+  border-color: #667eea;
+}
+
+.help-page .search-input .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #667eea;
+  box-shadow: 0 2px 20px rgba(102, 126, 234, 0.2);
+}
+
+.help-page .custom-tabs .MuiTabs-indicator {
+  display: none;
+}
+
+.help-page .custom-tabs .MuiTab-root {
+  text-transform: none;
+  font-weight: 500;
+  font-size: 1rem;
+  margin: 0 5px;
+  padding: 15px 25px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  color: #666;
+  transition: all 0.3s ease;
+  min-width: auto;
+}
+
+.help-page .custom-tabs .MuiTab-root:hover {
+  background-color: #e9ecef;
+  transform: translateY(-2px);
+}
+
+.help-page .custom-tabs .Mui-selected {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.help-page .content-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.help-page .content-title {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  color: #333;
+  font-weight: 600;
+}
+
+.help-page .content-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.help-page .terms-grid,
+.help-page .faq-container,
+.help-page .contact-flex,
+.help-page .guide-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+}
+
+.help-page .card {
+  flex: 1 1 300px;
+  padding: 30px;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  border: 1px solid #e0e0e0;
+  height: 100%;
+  background: white;
+  text-align: center;
+}
+
+.help-page .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.help-page .card .MuiAvatar-root {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 20px;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.help-page .card-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.help-page .card-desc {
+  color: #666;
+  line-height: 1.6;
+}
+
+.help-page .accordion {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.help-page .accordion-summary {
+  background-color: #f8f9fa;
+  cursor: pointer;
+}
+
+.help-page .accordion-summary:hover {
+  background-color: #e9ecef;
+}
+
+.help-page .accordion-details {
+  background-color: white;
+  padding: 16px;
+}
+
+.faq-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.help-page .faq-icon {
+  color: #667eea;
+  margin-right: 15px;
+  font-size: 1.2rem;
+}
+
+.help-page .faq-question {
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.help-page .contact-form,
+.help-page .contact-info {
+  flex: 1 1 400px;
+  padding: 30px;
+  border-radius: 16px;
+  background-color: #f8f9fa;
+}
+
+.help-page .contact-form {
+  gap: 15px;
+}
+
+.help-page .contact-info {
+  background-color: white;
+  box-shadow: none;
+}
+
+.help-page .contact-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.help-page .contact-icon {
+  color: #667eea;
+  font-size: 1.5rem;
+  margin-right: 15px;
+}
+
+.help-page .form-group {
+  margin-bottom: 20px;
+}
+
+.help-page .submit-button {
+  margin-top: 10px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 15px 30px;
+  font-size: 1rem;
+  border-radius: 12px;
+  text-transform: none;
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.help-page .submit-button:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-2px);
+}
+
+.help-page .guide-link {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.help-page .guide-link:hover {
+  text-decoration: underline;
+}

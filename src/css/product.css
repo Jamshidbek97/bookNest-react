@@ -1,5 +1,6 @@
 .products-page {
   width: 1300px;
+
   margin: 0 auto;
   font-family: "Segoe UI", sans-serif;
   padding: 40px 20px;
@@ -58,6 +59,8 @@
 /* Left Genre Filters */
 .products-page .left-filters {
   position: absolute;
+  min-height: 100vh; /* Prevents footer collapse */
+  overflow: hidden;
   top: 180px;
   left: 20px;
   display: flex;
@@ -88,7 +91,8 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 25px;
-  margin-left: 100px;
+  margin-left: 0;
+  padding: 0 100px;
 }
 
 /* Product Card */
@@ -248,7 +252,7 @@
 
 .products .events-frame {
   max-width: 1300px;
-  margin: 100px auto;
+  margin: 60px auto;
   padding: 0 20px;
 }
 
@@ -272,6 +276,7 @@
 
 .products .events-card:hover {
   transform: scale(1.04);
+  cursor: pointer;
 }
 
 .products .events-img-wrapper {
@@ -360,7 +365,7 @@
 /* Location */
 .location-frame {
   width: 100%;
-  min-height: 700px;
+  min-height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -440,6 +445,7 @@
 }
 
 .products .testimonial-card:hover {
+  cursor: pointer;
   transform: translateY(-6px);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
@@ -472,4 +478,60 @@
 .products .user-role {
   font-size: 0.85rem;
   color: #777;
+}
+
+/* Detailed products */
+.products .product-detail {
+  max-width: 1300px;
+  margin: 80px auto;
+  padding: 0 20px;
+}
+
+.products .product-image img {
+  width: 100%;
+  max-width: 350px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.products .product-info {
+  flex: 1;
+}
+
+.products .product-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.products .product-author {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 12px;
+}
+
+.products .genre-chip {
+  background-color: #f44336;
+  color: white;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.products .product-description {
+  font-size: 0.95rem;
+  color: #444;
+  margin-top: 16px;
+  line-height: 1.6;
+}
+
+.products .product-price {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2e7d32;
+  margin-top: 20px;
+}
+
+.products .product-stock {
+  font-size: 0.95rem;
+  color: #666;
 }
