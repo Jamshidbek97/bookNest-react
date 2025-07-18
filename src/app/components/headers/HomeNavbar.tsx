@@ -128,7 +128,7 @@ export default function HomeNavbar(props: HomeNavbarProps) {
             <StyledNavLink to="/help" activeClassName="underline">
               <SupportAgentIcon fontSize="small" /> Support
             </StyledNavLink>
-            <Basket />
+            {authMember && <Basket />}
             <FormControlLabel
               control={
                 <Switch
