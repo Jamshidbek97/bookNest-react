@@ -127,7 +127,7 @@ export default function OtherNavbar(props: OtherNavbarProps) {
             <StyledNavLink to="/help" activeClassName="underline">
               <SupportAgentIcon fontSize="small" /> Support
             </StyledNavLink>
-            {authMember && <Basket />}
+            {/* {authMember && <Basket />} */}
             <FormControlLabel
               control={
                 <Switch

@@ -21,17 +21,29 @@ import Basket from "./Basket";
 import { CartItem } from "../../../lib/types/search";
 
 interface HomeNavbarProps {
-  // cartItems: CartItem[];
   modalOpen: boolean;
   setModalOpen: (open: boolean) => void;
   modalMode: "login" | "signup";
   setModalMode: (mode: "login" | "signup") => void;
+  cartItems: CartItem[];
+  onAdd: (item: CartItem) => void;
+  onDelete: (item: CartItem) => void;
+  onRemove: (item: CartItem) => void;
+  onDeleteAll: () => void;
 }
 
 export default function HomeNavbar(props: HomeNavbarProps) {
-  const { modalOpen, setModalOpen, modalMode, setModalMode } = props;
+  const {
+    setModalOpen,
+    setModalMode,
+    cartItems,
+    onAdd,
+    onDelete,
+    onDeleteAll,
+    onRemove,
+  } = props;
   const history = useHistory();
-  const authMember = false; // Replace this with real auth logic
+  const authMember = true; // Replace this with real auth logic
   const [darkMode, setDarkMode] = useState(false);
 
   const StyledNavLink = styled(NavLink)(({ theme }) => ({
@@ -128,7 +140,15 @@ export default function HomeNavbar(props: HomeNavbarProps) {
             <StyledNavLink to="/help" activeClassName="underline">
               <SupportAgentIcon fontSize="small" /> Support
             </StyledNavLink>
-            {authMember && <Basket />}
+            {authMember && (
+              <Basket
+                cartItems={cartItems}
+                onAdd={onAdd}
+                onDelete={onDelete}
+                onRemove={onRemove}
+                onDeleteAll={onDeleteAll}
+              />
+            )}
             <FormControlLabel
               control={
                 <Switch

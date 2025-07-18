@@ -1,70 +1,55 @@
 import React, { useState } from "react";
 import "../../../css/basket.css";
-
-interface Book {
-  id: string;
-  title: string;
-  author: string;
-  price: number;
-  image: string;
-  isbn: string;
-}
-
-interface CartItem extends Book {
-  quantity: number;
-}
+import { useGlobals } from "../../hooks/useGlobals";
+import { useHistory } from "react-router-dom";
+import { CartItem } from "../../../lib/types/search";
+import { Messages } from "../../../lib/config";
+import OrderService from "../../services/Order.Service";
+import { sweetErrorHandling } from "../../../lib/sweetAlert";
 
 interface BasketProps {
-  cartItems?: CartItem[];
-  onAdd?: (item: CartItem) => void;
-  onRemove?: (item: CartItem) => void;
-  onDelete?: (item: CartItem) => void;
-  onDeleteAll?: () => void;
-  onProceedOrder?: () => void;
+  cartItems: CartItem[];
+  onAdd: (item: CartItem) => void;
+  onRemove: (item: CartItem) => void;
+  onDelete: (item: CartItem) => void;
+  onDeleteAll: () => void;
 }
 
-const Basket: React.FC<BasketProps> = ({
-  cartItems = [],
-  onAdd = () => {},
-  onRemove = () => {},
-  onDelete = () => {},
-  onDeleteAll = () => {},
-  onProceedOrder = () => {},
-}) => {
+export default function Basket(props: BasketProps) {
+  const { cartItems, onAdd, onDelete, onDeleteAll, onRemove } = props;
+  // TODO:
+  const { authMember, setOrderBuilder } = useGlobals();
   const [isOpen, setIsOpen] = useState(false);
+  const history = useHistory();
 
   const mockCartItems: CartItem[] = [
     {
-      id: "1",
+      _id: "1",
       title: "The Great Gatsby",
       author: "F. Scott Fitzgerald",
       price: 12.99,
-      image: "/books/gatsby.jpg",
-      isbn: "978-0-7432-7356-5",
+      coverImage: "/books/gatsby.jpg",
       quantity: 2,
     },
     {
-      id: "2",
+      _id: "2",
       title: "To Kill a Mockingbird",
       author: "Harper Lee",
       price: 14.99,
-      image: "/books/mockingbird.jpg",
-      isbn: "978-0-06-112008-4",
+      coverImage: "/books/mockingbird.jpg",
       quantity: 1,
     },
     {
-      id: "3",
+      _id: "3",
       title: "1984",
       author: "George Orwell",
       price: 13.99,
-      image: "/books/1984.jpg",
-      isbn: "978-0-452-28423-4",
+      coverImage: "/books/1984.jpg",
       quantity: 1,
     },
   ];
 
-  const items = cartItems.length > 0 ? cartItems : mockCartItems;
-
+  const items = cartItems?.length > 0 ? cartItems : mockCartItems;
   const calculateTotal = () => {
     return items.reduce((total, item) => total + item.price * item.quantity, 0);
   };
@@ -82,24 +67,42 @@ const Basket: React.FC<BasketProps> = ({
   };
 
   const handleAddItem = (item: CartItem) => {
-    onAdd(item);
+    onAdd?.(item);
   };
 
   const handleRemoveItem = (item: CartItem) => {
-    onRemove(item);
+    onRemove?.(item);
   };
 
   const handleDeleteItem = (item: CartItem) => {
-    onDelete(item);
+    onDelete?.(item);
   };
 
   const handleDeleteAll = () => {
-    onDeleteAll();
+    onDeleteAll?.();
   };
 
-  const handleProceedOrder = () => {
-    onProceedOrder();
-    setIsOpen(false);
+  // const handleProceedOrder = () => {
+  // onProceedOrder();
+  //   setIsOpen(false);
+  // };
+
+  const handleProceedOrder = async () => {
+    try {
+      setIsOpen(false);
+      if (!authMember) throw new Error(Messages.error2);
+
+      const order = new OrderService();
+      await order.createOrder(cartItems);
+
+      onDeleteAll();
+
+      setOrderBuilder(new Date());
+      history.push("/orders");
+    } catch (error) {
+      console.log(error);
+      sweetErrorHandling(error).then();
+    }
   };
 
   return (
@@ -159,7 +162,7 @@ const Basket: React.FC<BasketProps> = ({
 
             <div className="basket-items">
               {items.map((item) => (
-                <div key={item.id} className="basket-item">
+                <div key={item._id} className="basket-item">
                   <button
                     className="remove-item-btn"
                     onClick={() => handleDeleteItem(item)}
@@ -178,7 +181,7 @@ const Basket: React.FC<BasketProps> = ({
                   </button>
 
                   <div className="item-image">
-                    <img src={item.image} alt={item.title} />
+                    <img src={item.coverImage} alt={item.title} />
                   </div>
 
                   <div className="item-details">
@@ -247,6 +250,4 @@ const Basket: React.FC<BasketProps> = ({
       )}
     </div>
   );
-};
-
-export default Basket;
+}
