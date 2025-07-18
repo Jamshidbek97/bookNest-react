@@ -29,7 +29,7 @@ interface OtherNavbarProps {
 
 export default function OtherNavbar(props: OtherNavbarProps) {
   const history = useHistory();
-  const authMember = false; // Replace this with real auth logic
+  const authMember = true; // Replace this with real auth logic
   const [darkMode, setDarkMode] = useState(false);
   const { modalOpen, setModalOpen, modalMode, setModalMode } = props;
 
@@ -70,7 +70,7 @@ export default function OtherNavbar(props: OtherNavbarProps) {
       className="other-navbar"
       sx={{
         backgroundImage: `url(${
-          darkMode ? "/img/bg-dark.jpg" : "img/bg-light.jpg"
+          darkMode ? "/img/bg-dark.webp" : "img/bg-light.jpg"
         })`,
         color: darkMode ? "#fff" : "#000",
         pb: 4,

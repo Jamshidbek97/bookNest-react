@@ -71,7 +71,7 @@ export default function HomeNavbar(props: HomeNavbarProps) {
       className="home-navbar"
       sx={{
         backgroundImage: `url(${
-          darkMode ? "/img/bg-dark.jpg" : "img/bg-light.jpg"
+          darkMode ? "/img/bg-dark.webp" : "img/bg-light.jpg"
         })`,
         color: darkMode ? "#fff" : "#000",
         pb: 4,
