@@ -18,20 +18,33 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { useState } from "react";
 import Basket from "./Basket";
+import { CartItem } from "../../../lib/types/search";
 
 interface OtherNavbarProps {
-  // cartItems: CartItem[];
   modalOpen: boolean;
   setModalOpen: (open: boolean) => void;
   modalMode: "login" | "signup";
   setModalMode: (mode: "login" | "signup") => void;
+  cartItems: CartItem[];
+  onAdd: (item: CartItem) => void;
+  onDelete: (item: CartItem) => void;
+  onRemove: (item: CartItem) => void;
+  onDeleteAll: () => void;
 }
 
 export default function OtherNavbar(props: OtherNavbarProps) {
   const history = useHistory();
   const authMember = true; // Replace this with real auth logic
   const [darkMode, setDarkMode] = useState(false);
-  const { modalOpen, setModalOpen, modalMode, setModalMode } = props;
+  const {
+    setModalOpen,
+    setModalMode,
+    cartItems,
+    onAdd,
+    onDelete,
+    onDeleteAll,
+    onRemove,
+  } = props;
 
   const StyledNavLink = styled(NavLink)(({ theme }) => ({
     textDecoration: "none",
@@ -127,7 +140,15 @@ export default function OtherNavbar(props: OtherNavbarProps) {
             <StyledNavLink to="/help" activeClassName="underline">
               <SupportAgentIcon fontSize="small" /> Support
             </StyledNavLink>
-            {/* {authMember && <Basket />} */}
+            {authMember && (
+              <Basket
+                cartItems={cartItems}
+                onAdd={onAdd}
+                onDelete={onDelete}
+                onRemove={onRemove}
+                onDeleteAll={onDeleteAll}
+              />
+            )}
             <FormControlLabel
               control={
                 <Switch

@@ -66,11 +66,11 @@ function App() {
           setModalOpen={setModalOpen}
           modalMode={modalMode}
           setModalMode={setModalMode}
-          //  cartItems={cartItems}
-          // onAdd={onAdd}
-          // onDelete={onDelete}
-          // onRemove={onRemove}
-          // onDeleteAll={onDeleteAll}
+          cartItems={cartItems}
+          onAdd={onAdd}
+          onDelete={onDelete}
+          onRemove={onRemove}
+          onDeleteAll={onDeleteAll}
 
           // handleLogoutClick={handleLogoutClick}
           // handleCloseLogout={handleCloseLogout}

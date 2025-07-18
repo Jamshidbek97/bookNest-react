@@ -22,34 +22,34 @@ export default function Basket(props: BasketProps) {
   const [isOpen, setIsOpen] = useState(false);
   const history = useHistory();
 
-  const mockCartItems: CartItem[] = [
-    {
-      _id: "1",
-      title: "The Great Gatsby",
-      author: "F. Scott Fitzgerald",
-      price: 12.99,
-      coverImage: "/books/gatsby.jpg",
-      quantity: 2,
-    },
-    {
-      _id: "2",
-      title: "To Kill a Mockingbird",
-      author: "Harper Lee",
-      price: 14.99,
-      coverImage: "/books/mockingbird.jpg",
-      quantity: 1,
-    },
-    {
-      _id: "3",
-      title: "1984",
-      author: "George Orwell",
-      price: 13.99,
-      coverImage: "/books/1984.jpg",
-      quantity: 1,
-    },
-  ];
+  // const mockCartItems: CartItem[] = [
+  //   {
+  //     _id: "1",
+  //     title: "The Great Gatsby",
+  //     author: "F. Scott Fitzgerald",
+  //     price: 12.99,
+  //     coverImage: "/books/gatsby.jpg",
+  //     quantity: 2,
+  //   },
+  //   {
+  //     _id: "2",
+  //     title: "To Kill a Mockingbird",
+  //     author: "Harper Lee",
+  //     price: 14.99,
+  //     coverImage: "/books/mockingbird.jpg",
+  //     quantity: 1,
+  //   },
+  //   {
+  //     _id: "3",
+  //     title: "1984",
+  //     author: "George Orwell",
+  //     price: 13.99,
+  //     coverImage: "/books/1984.jpg",
+  //     quantity: 1,
+  //   },
+  // ];
 
-  const items = cartItems?.length > 0 ? cartItems : mockCartItems;
+  const items = cartItems;
   const calculateTotal = () => {
     return items.reduce((total, item) => total + item.price * item.quantity, 0);
   };
@@ -134,7 +134,14 @@ export default function Basket(props: BasketProps) {
             <div className="basket-header">
               {items.length === 0 ? (
                 <div className="empty-cart">
-                  <span>📚 Your cart is empty!</span>
+                  <div className="empty-icon">🛒</div>
+                  <div className="empty-message">Your cart is empty</div>
+                  <button
+                    className="browse-btn"
+                    onClick={() => history.push("/products")}
+                  >
+                    Browse Books
+                  </button>
                 </div>
               ) : (
                 <div className="cart-header-content">
