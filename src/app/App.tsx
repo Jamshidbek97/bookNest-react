@@ -13,29 +13,23 @@ import useBasket from "./hooks/useBasket";
 import "../css/app.css";
 import "../css/navbar.css";
 import "../css/footer.css";
+import AuthenticationModal from "./components/auth";
+
+type Mode = "login" | "signup";
 
 function App() {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<Mode>("login");
   const { setAuthMember } = useGlobals();
   const location = useLocation();
   const { cartItems, onAdd, onDelete, onDeleteAll, onRemove } = useBasket();
-  const [signupOpen, setSignupOpen] = useState<boolean>(false);
-  const [loginOpen, setLoginOpen] = useState<boolean>(false);
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
+  const openModal = (mode: Mode) => {
+    setModalMode(mode);
+    setModalOpen(true);
+  };
 
   /********* Handlers **********/
-
-  const handleSignupClose = () => {
-    setSignupOpen(false);
-  };
-  const handleLoginClose = () => {
-    setLoginOpen(false);
-  };
-
-  const handleLogoutClick = (e: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(e.currentTarget);
-  };
-
-  const handleCloseLogout = () => setAnchorEl(null);
 
   const handleLogoutRequest = async () => {
     try {
@@ -51,17 +45,21 @@ function App() {
     <>
       {location.pathname === "/" ? (
         <HomeNavbar
-        // cartItems={cartItems}
-        // onAdd={onAdd}
-        // onDelete={onDelete}
-        // onRemove={onRemove}
-        // onDeleteAll={onDeleteAll}
-        // setSignupOpen={setSignupOpen}
-        // setLoginOpen={setLoginOpen}
-        // anchorEl={anchorEl}
-        // handleLogoutClick={handleLogoutClick}
-        // handleCloseLogout={handleCloseLogout}
-        // handleLogoutRequest={handleLogoutRequest}
+          modalOpen={modalOpen}
+          setModalOpen={setModalOpen}
+          modalMode={modalMode}
+          setModalMode={setModalMode}
+
+          // cartItems={cartItems}
+          // onAdd={onAdd}
+          // onDelete={onDelete}
+          // onRemove={onRemove}
+          // onDeleteAll={onDeleteAll}
+
+          // anchorEl={anchorEl}
+          // handleLogoutClick={handleLogoutClick}
+          // handleCloseLogout={handleCloseLogout}
+          // handleLogoutRequest={handleLogoutRequest}
         />
       ) : (
         <OtherNavbar
@@ -96,6 +94,14 @@ function App() {
         </Route>
       </Switch>
       <Footer />
+      {modalOpen && (
+        <AuthenticationModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          // @ts-ignore
+          initialMode={modalMode}
+        />
+      )}
     </>
   );
 }

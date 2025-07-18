@@ -18,10 +18,20 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { useState } from "react";
 import Basket from "./Basket";
+import { CartItem } from "../../../lib/types/search";
 
-export default function HomeNavbar() {
+interface HomeNavbarProps {
+  // cartItems: CartItem[];
+  modalOpen: boolean;
+  setModalOpen: (open: boolean) => void;
+  modalMode: "login" | "signup";
+  setModalMode: (mode: "login" | "signup") => void;
+}
+
+export default function HomeNavbar(props: HomeNavbarProps) {
+  const { modalOpen, setModalOpen, modalMode, setModalMode } = props;
   const history = useHistory();
-  const authMember = true; // Replace this with real auth logic
+  const authMember = false; // Replace this with real auth logic
   const [darkMode, setDarkMode] = useState(false);
 
   const StyledNavLink = styled(NavLink)(({ theme }) => ({
@@ -135,6 +145,10 @@ export default function HomeNavbar() {
                 variant="contained"
                 color="primary"
                 className="login-button"
+                onClick={() => {
+                  setModalMode("login");
+                  setModalOpen(true);
+                }}
                 startIcon={<LoginIcon />}
               >
                 Login
@@ -169,7 +183,15 @@ export default function HomeNavbar() {
             </Typography>
             <Box className="signup" mt={4}>
               {!authMember ? (
-                <Button variant="contained" color="secondary" size="large">
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  size="large"
+                  onClick={() => {
+                    setModalMode("signup");
+                    setModalOpen(true);
+                  }}
+                >
                   Sign Up
                 </Button>
               ) : (
