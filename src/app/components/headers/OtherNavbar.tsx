@@ -19,10 +19,19 @@ import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { useState } from "react";
 import Basket from "./Basket";
 
-export default function OtherNavbar() {
+interface OtherNavbarProps {
+  // cartItems: CartItem[];
+  modalOpen: boolean;
+  setModalOpen: (open: boolean) => void;
+  modalMode: "login" | "signup";
+  setModalMode: (mode: "login" | "signup") => void;
+}
+
+export default function OtherNavbar(props: OtherNavbarProps) {
   const history = useHistory();
-  const authMember = true; // Replace this with real auth logic
+  const authMember = false; // Replace this with real auth logic
   const [darkMode, setDarkMode] = useState(false);
+  const { modalOpen, setModalOpen, modalMode, setModalMode } = props;
 
   const StyledNavLink = styled(NavLink)(({ theme }) => ({
     textDecoration: "none",
@@ -118,7 +127,7 @@ export default function OtherNavbar() {
             <StyledNavLink to="/help" activeClassName="underline">
               <SupportAgentIcon fontSize="small" /> Support
             </StyledNavLink>
-            <Basket />
+            {authMember && <Basket />}
             <FormControlLabel
               control={
                 <Switch
@@ -135,6 +144,10 @@ export default function OtherNavbar() {
                 variant="contained"
                 color="primary"
                 className="login-button"
+                onClick={() => {
+                  setModalMode("login");
+                  setModalOpen(true);
+                }}
                 startIcon={<LoginIcon />}
               >
                 Login

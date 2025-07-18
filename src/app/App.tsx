@@ -63,17 +63,19 @@ function App() {
         />
       ) : (
         <OtherNavbar
-        //  cartItems={cartItems}
-        // onAdd={onAdd}
-        // onDelete={onDelete}
-        // onRemove={onRemove}
-        // onDeleteAll={onDeleteAll}
-        // setSignupOpen={setSignupOpen}
-        // setLoginOpen={setLoginOpen}
-        // anchorEl={anchorEl}
-        // handleLogoutClick={handleLogoutClick}
-        // handleCloseLogout={handleCloseLogout}
-        // handleLogoutRequest={handleLogoutRequest}
+          modalOpen={modalOpen}
+          setModalOpen={setModalOpen}
+          modalMode={modalMode}
+          setModalMode={setModalMode}
+          //  cartItems={cartItems}
+          // onAdd={onAdd}
+          // onDelete={onDelete}
+          // onRemove={onRemove}
+          // onDeleteAll={onDeleteAll}
+
+          // handleLogoutClick={handleLogoutClick}
+          // handleCloseLogout={handleCloseLogout}
+          // handleLogoutRequest={handleLogoutRequest}
         />
       )}
       <Switch>
