@@ -14,13 +14,19 @@ import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import { retrieveNewBooks } from "./selector";
 import { serverApi } from "../../../lib/config";
+import { CartItem } from "../../../lib/types/search";
 
 /*********** REDUX SLICE AND SELECTOR ***********/
 const newBooksRetriever = createSelector(retrieveNewBooks, (newBooks) => ({
   newBooks,
 }));
 
-export default function NewBooks() {
+interface NewProductsProps {
+  onAdd: (item: CartItem) => void;
+}
+
+export default function NewBooks(props: NewProductsProps) {
+  const { onAdd } = props;
   const { newBooks } = useSelector(newBooksRetriever);
 
   return (
@@ -53,7 +59,21 @@ export default function NewBooks() {
                   <IconButton className="mui-icon" aria-label="like">
                     <FavoriteIcon />
                   </IconButton>
-                  <IconButton className="mui-icon" aria-label="add to cart">
+                  <IconButton
+                    onClick={(e) => {
+                      onAdd({
+                        _id: book._id,
+                        quantity: 1,
+                        title: book.title,
+                        price: book.price,
+                        coverImage: imageSrc,
+                      });
+                      console.log("Button clicked");
+                      e.stopPropagation();
+                    }}
+                    className="mui-icon"
+                    aria-label="add to cart"
+                  >
                     <ShoppingCartIcon />
                   </IconButton>
                   <IconButton className="mui-icon" aria-label="view">

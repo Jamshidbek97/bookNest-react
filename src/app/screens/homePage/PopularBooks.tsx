@@ -14,6 +14,7 @@ import { retrievePopularBooks } from "./selector";
 import { useSelector } from "react-redux";
 import { serverApi } from "../../../lib/config";
 import { Book } from "../../../lib/types/product";
+import { CartItem } from "../../../lib/types/search";
 
 /*********** REDUX SLICE AND SELECTOR ***********/
 const popularBooksRetriever = createSelector(
@@ -21,7 +22,12 @@ const popularBooksRetriever = createSelector(
   (popularBooks) => ({ popularBooks })
 );
 
-export default function PopularBooks() {
+interface PopularProductsProps {
+  onAdd: (item: CartItem) => void;
+}
+
+export default function PopularBooks(props: PopularProductsProps) {
+  const { onAdd } = props;
   const { popularBooks } = useSelector(popularBooksRetriever);
   return (
     <Box className="popular-books">
@@ -55,7 +61,21 @@ export default function PopularBooks() {
                   <IconButton className="mui-icon-vertical" aria-label="like">
                     <FavoriteIcon />
                   </IconButton>
-                  <IconButton className="mui-icon-vertical" aria-label="cart">
+                  <IconButton
+                    className="mui-icon-vertical"
+                    aria-label="cart"
+                    onClick={(e) => {
+                      onAdd({
+                        _id: book._id,
+                        quantity: 1,
+                        title: book.title,
+                        price: book.price,
+                        coverImage: imageSrc,
+                      });
+                      console.log("Button clicked");
+                      e.stopPropagation();
+                    }}
+                  >
                     <ShoppingCartIcon />
                   </IconButton>
                   <IconButton className="mui-icon-vertical" aria-label="view">

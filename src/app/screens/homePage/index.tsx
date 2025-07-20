@@ -14,6 +14,7 @@ import { BookGenre } from "../../../lib/enums/book.enum";
 import MemberService from "../../services/MemberService";
 import { Member } from "../../../lib/types/member";
 import "../../../css/home.css";
+import { CartItem } from "../../../lib/types/search";
 
 /** REDUX SLICE AND SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -22,7 +23,12 @@ const actionDispatch = (dispatch: Dispatch) => ({
   setSpotlightMembers: (data: Member[]) => dispatch(setSpotlightMembers(data)),
 });
 
-export default function HomePage() {
+interface HomePageProps {
+  onAdd: (item: CartItem) => void;
+}
+
+export default function HomePage(props: HomePageProps) {
+  const { onAdd } = props;
   const { setPopularBooks, setNewBooks, setSpotlightMembers } = actionDispatch(
     useDispatch()
   );
@@ -65,8 +71,8 @@ export default function HomePage() {
   return (
     <div className="homepage">
       <Statistics />
-      <PopularBooks />
-      <NewBooks />
+      <PopularBooks onAdd={onAdd} />
+      <NewBooks onAdd={onAdd} />
       <BookOfTheMonth />
       <SpotlightMembers />
       <CallToAction />
