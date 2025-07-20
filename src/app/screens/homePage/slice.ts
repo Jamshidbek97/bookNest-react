@@ -12,6 +12,8 @@ const homePageSlice = createSlice({
   initialState,
   reducers: {
     setPopularBooks: (state, action) => {
+      console.log("[4] setPopularBooks reducer hit");
+      console.log("🔥 Setting popularBooks", action.payload);
       state.popularBooks = action.payload;
     },
     setNewBooks: (state, action) => {
