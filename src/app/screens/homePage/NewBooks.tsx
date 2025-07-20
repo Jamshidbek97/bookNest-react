@@ -10,47 +10,19 @@ import {
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useSelector } from "react-redux";
+import { createSelector } from "reselect";
+import { retrieveNewBooks } from "./selector";
+import { serverApi } from "../../../lib/config";
 
-const newBooks = [
-  {
-    _id: "1",
-    title: "The Midnight Library",
-    author: "Matt Haig",
-    genre: "FICTION",
-    price: 19,
-    bookLikes: 22,
-    coverImages: ["img/default-book.jpg"],
-  },
-  {
-    _id: "2",
-    title: "Atomic Habits",
-    author: "James Clear",
-    genre: "SELF-HELP",
-    price: 25,
-    bookLikes: 8,
-    coverImages: ["img/default-book.jpg"],
-  },
-  {
-    _id: "3",
-    title: "Educated",
-    author: "Tara Westover",
-    genre: "MEMOIR",
-    price: 21,
-    bookLikes: 31,
-    coverImages: ["img/default-book.jpg"],
-  },
-  {
-    _id: "4",
-    title: "Dune",
-    author: "Frank Herbert",
-    genre: "SCI-FI",
-    price: 24,
-    bookLikes: 10,
-    coverImages: ["img/default-book.jpg"],
-  },
-];
+/*********** REDUX SLICE AND SELECTOR ***********/
+const newBooksRetriever = createSelector(retrieveNewBooks, (newBooks) => ({
+  newBooks,
+}));
 
 export default function NewBooks() {
+  const { newBooks } = useSelector(newBooksRetriever);
+
   return (
     <Box className="new-books">
       <Typography
@@ -62,10 +34,9 @@ export default function NewBooks() {
       </Typography>
       <Box className="book-card-container">
         {newBooks.map((book) => {
-          const imageSrc =
-            book?.coverImages && book.coverImages.length > 0
-              ? `/${book.coverImages[0]}`
-              : "/img/default-book.jpg";
+          const imageSrc = `${serverApi}/${
+            book.coverImages?.[0] || "img/default-book.jpg"
+          }`;
 
           return (
             <Card className="book-card-mui" key={book._id} elevation={4}>
