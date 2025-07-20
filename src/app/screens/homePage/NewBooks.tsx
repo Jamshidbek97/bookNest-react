@@ -15,6 +15,7 @@ import { createSelector } from "reselect";
 import { retrieveNewBooks } from "./selector";
 import { serverApi } from "../../../lib/config";
 import { CartItem } from "../../../lib/types/search";
+import { useHistory } from "react-router-dom";
 
 /*********** REDUX SLICE AND SELECTOR ***********/
 const newBooksRetriever = createSelector(retrieveNewBooks, (newBooks) => ({
@@ -28,6 +29,8 @@ interface NewProductsProps {
 export default function NewBooks(props: NewProductsProps) {
   const { onAdd } = props;
   const { newBooks } = useSelector(newBooksRetriever);
+
+  const history = useHistory();
 
   return (
     <Box className="new-books">
@@ -45,7 +48,13 @@ export default function NewBooks(props: NewProductsProps) {
           }`;
 
           return (
-            <Card className="book-card-mui" key={book._id} elevation={4}>
+            <Card
+              className="book-card-mui"
+              style={{ cursor: "pointer" }}
+              key={book._id}
+              elevation={4}
+              onClick={() => history.push(`/product/${book._id}`)}
+            >
               <Box position="relative">
                 <CardMedia
                   component="img"
@@ -58,6 +67,9 @@ export default function NewBooks(props: NewProductsProps) {
                 <Box className="mui-hover-icons">
                   <IconButton className="mui-icon" aria-label="like">
                     <FavoriteIcon />
+                    {book.bookLikes > 0 && (
+                      <span className="cart-badge">{book.bookLikes}</span>
+                    )}
                   </IconButton>
                   <IconButton
                     onClick={(e) => {
@@ -78,6 +90,9 @@ export default function NewBooks(props: NewProductsProps) {
                   </IconButton>
                   <IconButton className="mui-icon" aria-label="view">
                     <VisibilityIcon />
+                    {book.bookViews > 0 && (
+                      <span className="cart-badge">{book.bookViews}</span>
+                    )}
                   </IconButton>
                 </Box>
               </Box>

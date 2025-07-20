@@ -14,7 +14,7 @@ const mockBook = {
   stockCount: 200,
   description:
     "To Kill a Mockingbird is a novel by Harper Lee, published in 1960, that explores themes of racial injustice and childhood innocence in the American South.",
-  coverImages: ["/uploads/products/default-book.jpg"],
+  coverImages: ["/img/default-book.jpg"],
   bookLikes: 21,
 };
 
@@ -23,10 +23,10 @@ console.log("Details page");
 export default function ProductDetail() {
   const [book, setBook] = useState(null);
 
-  if (!book) return null;
+  // if (!book) return null;
 
   return (
-    <Box className="products product-detail">
+    <Box className="d-products product-detail">
       <Stack direction={{ xs: "column", md: "row" }} spacing={4}>
         <Box className="product-image">
           <img

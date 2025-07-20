@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import { serverApi } from "../../../lib/config";
 import { Book } from "../../../lib/types/product";
 import { CartItem } from "../../../lib/types/search";
+import { useHistory } from "react-router-dom";
 
 /*********** REDUX SLICE AND SELECTOR ***********/
 const popularBooksRetriever = createSelector(
@@ -29,6 +30,8 @@ interface PopularProductsProps {
 export default function PopularBooks(props: PopularProductsProps) {
   const { onAdd } = props;
   const { popularBooks } = useSelector(popularBooksRetriever);
+
+  const history = useHistory();
   return (
     <Box className="popular-books">
       <Typography
@@ -45,7 +48,13 @@ export default function PopularBooks(props: PopularProductsProps) {
           }`;
 
           return (
-            <Card className="book-card-popular" key={book._id} elevation={5}>
+            <Card
+              style={{ cursor: "pointer" }}
+              className="book-card-popular"
+              key={book._id}
+              elevation={5}
+              onClick={() => history.push(`/product/${book._id}`)}
+            >
               <Box position="relative">
                 <CardMedia
                   component="img"
@@ -54,12 +63,15 @@ export default function PopularBooks(props: PopularProductsProps) {
                   alt={book.title}
                   className="book-img"
                 />
-                {book.bookLikes > 15 && (
+                {book.bookLikes >= 1 && (
                   <Box className="badge-top-right">🏆 Bestseller</Box>
                 )}
                 <Box className="mui-vertical-icons">
                   <IconButton className="mui-icon-vertical" aria-label="like">
                     <FavoriteIcon />
+                    {book.bookLikes > 0 && (
+                      <span className="cart-badge">{book.bookLikes}</span>
+                    )}
                   </IconButton>
                   <IconButton
                     className="mui-icon-vertical"
@@ -80,6 +92,9 @@ export default function PopularBooks(props: PopularProductsProps) {
                   </IconButton>
                   <IconButton className="mui-icon-vertical" aria-label="view">
                     <VisibilityIcon />
+                    {book.bookViews > 0 && (
+                      <span className="cart-badge">{book.bookViews}</span>
+                    )}
                   </IconButton>
                 </Box>
               </Box>

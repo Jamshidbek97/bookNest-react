@@ -1,6 +1,7 @@
 import { Box, Button, Typography, Stack, Paper } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { useHistory } from "react-router-dom";
 
 const featuredBook = {
   title: "To Kill a Mockingbird",
@@ -13,6 +14,7 @@ const featuredBook = {
 };
 
 export default function BookOfTheMonth() {
+  const history = useHistory();
   return (
     <Box className="homepage book-of-the-month">
       <Paper elevation={3} className="book-month-card">
@@ -48,6 +50,7 @@ export default function BookOfTheMonth() {
             color="primary"
             className="cta-button"
             startIcon={<ShoppingCartIcon />}
+            onClick={() => history.push(`/product/all`)}
           >
             Buy Now
           </Button>

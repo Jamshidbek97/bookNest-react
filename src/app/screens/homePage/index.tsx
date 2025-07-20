@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Statistics from "./Statistics";
 import PopularBooks from "./PopularBooks";
 import NewBooks from "./NewBooks";
@@ -10,7 +10,7 @@ import { Book } from "../../../lib/types/product";
 import { setNewBooks, setPopularBooks, setSpotlightMembers } from "./slice";
 import { useDispatch } from "react-redux";
 import ProductService from "../../services/Product.Service";
-import { BookGenre } from "../../../lib/enums/book.enum";
+
 import MemberService from "../../services/MemberService";
 import { Member } from "../../../lib/types/member";
 import "../../../css/home.css";

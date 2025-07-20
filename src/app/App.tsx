@@ -14,6 +14,7 @@ import "../css/app.css";
 import "../css/navbar.css";
 import "../css/footer.css";
 import AuthenticationModal from "./components/auth";
+import ProductDetail from "./screens/productPage/ProductDetail";
 
 type Mode = "login" | "signup";
 
@@ -78,8 +79,11 @@ function App() {
         />
       )}
       <Switch>
-        <Route path="/products">
+        <Route path="/product/all">
           <ProductsPage />
+        </Route>
+        <Route path="/product/:productId">
+          <ProductDetail />
         </Route>
         <Route path="/orders">
           <OrderPage />
