@@ -83,7 +83,7 @@ function App() {
           <ProductsPage onAdd={onAdd} />
         </Route>
         <Route path="/product/:productId">
-          <ProductDetail />
+          <ProductDetail onAdd={onAdd} />
         </Route>
         <Route path="/orders">
           <OrderPage />

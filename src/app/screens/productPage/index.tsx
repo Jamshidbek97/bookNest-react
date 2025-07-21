@@ -21,7 +21,7 @@ export default function ProductsPage(props: ProductsProps) {
     <div className="products-page">
       <Switch>
         <Route path={`${products.path}/:productId`}>
-          <ProductDetail />
+          <ProductDetail onAdd={onAdd} />
         </Route>
 
         <Route path="/products">

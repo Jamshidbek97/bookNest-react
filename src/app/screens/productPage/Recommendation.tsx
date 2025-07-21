@@ -8,16 +8,15 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { createSelector } from "reselect";
 import { retrieveAlsoLike } from "./selector";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { serverApi } from "../../../lib/config";
-import { Dispatch } from "@reduxjs/toolkit";
-import { Book, BookInquiry } from "../../../lib/types/product";
-import { setAlsoLike } from "./slice";
-import { useEffect, useState } from "react";
-import ProductService from "../../services/Product.Service";
+
+import { Book } from "../../../lib/types/product";
+
 import { useHistory } from "react-router-dom";
 
 /*********** REDUX SLICE AND SELECTOR ***********/
+
 const recommendationRetriever = createSelector(
   retrieveAlsoLike,
   (alsoLike) => ({ alsoLike })
@@ -56,7 +55,7 @@ export default function Recommendations() {
             }}
             speed={800}
           >
-            {alsoLike.map((value, index) => (
+            {alsoLike.map((value: Book, index) => (
               <SwiperSlide
                 key={index}
                 onClick={() => history.push(`/product/${value._id}`)}
@@ -65,8 +64,9 @@ export default function Recommendations() {
                   <div className="events-img-wrapper">
                     <img
                       src={
-                        `${serverApi}/${value.coverImages?.[0]}` ||
-                        "img/default-book.jpg"
+                        value?.coverImages?.[0]
+                          ? `${serverApi}/${value.coverImages[0]}`
+                          : "/img/default-book.jpg"
                       }
                       alt={value.title}
                       className="events-img"
@@ -90,15 +90,14 @@ export default function Recommendations() {
                         <AccessTimeIcon fontSize="small" />
 
                         <span>
-                          {/*@ts-ignore */}
-                          {new Date(value.createdAt).toLocaleDateString(
+                          {/* {new Date(value.createdAt).toLocaleDateString(
                             "en-CA",
                             {
                               year: "numeric",
                               month: "2-digit",
                               day: "2-digit",
                             }
-                          )}
+                          )} */}
                         </span>
                       </Box>
                       <Box className="bott-info-main">

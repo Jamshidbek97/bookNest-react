@@ -1,57 +1,96 @@
 import { Box, Typography, Button, Stack, Chip } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Member } from "../../../lib/types/member";
 import { Book } from "../../../lib/types/product";
-
-const mockBook = {
-  _id: "686eb04726452961595003da",
-  title: "To Kill a Mockingbird",
-  author: "Harper Lee",
-  genre: "FICTION",
-  status: "AVAILABLE",
-  price: 20,
-  format: "HARDCOVER",
-  stockCount: 200,
-  description:
-    "To Kill a Mockingbird is a novel by Harper Lee, published in 1960, that explores themes of racial injustice and childhood innocence in the American South.",
-  coverImages: ["/img/default-book.jpg"],
-  bookLikes: 21,
-};
+import { createSelector, Dispatch } from "@reduxjs/toolkit";
+import { setProductDetail } from "./slice";
+import { retrieveChosenProduct } from "./selector";
+import { CartItem } from "../../../lib/types/search";
+import ProductService from "../../services/Product.Service";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { serverApi } from "../../../lib/config";
 
 /** REDUX SLICE && SELECTOR */
-// const actionDispatch = (dispatch: ReduxDispatch) => ({
-//   setRestaurant: (data: Member) => dispatch(setRestaurant(data)),
-//   setChosenProduct: (data: Book) => dispatch(setChosenProduct(data)),
-// });
+const actionDispatch = (dispatch: Dispatch) => ({
+  setProductDetail: (data: Book) => dispatch(setProductDetail(data)),
+});
 
-export default function ProductDetail() {
+const productDetailRetriever = createSelector(
+  retrieveChosenProduct,
+  (chosenProduct) => ({
+    chosenProduct,
+  })
+);
+
+interface DetailProps {
+  onAdd: (item: CartItem) => void;
+}
+
+export default function ProductDetail(props: DetailProps) {
+  const { onAdd } = props;
+  const { productId } = useParams<{ productId: string }>();
+  const { setProductDetail } = actionDispatch(useDispatch());
+
+  const { chosenProduct } = useSelector(productDetailRetriever);
+
+  useEffect(() => {
+    const product = new ProductService();
+    product
+      .getProduct(productId)
+      .then((data) => setProductDetail(data))
+      .catch((err) => console.log("Error: ", err));
+  }, []);
+
   return (
     <Box className="d-products product-detail">
       <Stack direction={{ xs: "column", md: "row" }} spacing={4}>
         <Box className="product-image">
           <img
-            src={mockBook.coverImages[0] || "/img/default-book.jpg"}
-            alt={mockBook.title}
+            src={
+              chosenProduct?.coverImages?.[0]
+                ? `${serverApi}/${chosenProduct.coverImages[0]}`
+                : "/img/default-book.jpg"
+            }
+            alt={chosenProduct?.title}
           />
         </Box>
 
         <Box className="product-info">
-          <Typography className="product-title">{mockBook.title}</Typography>
-          <Typography className="product-author">
-            by {mockBook.author}
+          <Typography className="product-title">
+            {chosenProduct?.title}
           </Typography>
-          <Chip label={mockBook.genre} className="genre-chip" />
+          <Typography className="product-author">
+            by {chosenProduct?.author}
+          </Typography>
+          <Chip label={chosenProduct?.genre} className="genre-chip" />
 
           <Typography className="product-description" mt={2}>
-            {mockBook.description}
+            {chosenProduct?.description}
           </Typography>
 
-          <Typography className="product-price">${mockBook.price}</Typography>
+          <Typography className="product-price">
+            ${chosenProduct?.price}
+          </Typography>
 
           <Stack direction="row" spacing={2} mt={3}>
-            <Button variant="contained" startIcon={<ShoppingCartIcon />}>
+            <Button
+              onClick={(e) => {
+                onAdd({
+                  _id: chosenProduct!._id,
+                  quantity: 1,
+                  title: chosenProduct!.title,
+                  price: chosenProduct!.price,
+                  coverImage: chosenProduct?.coverImages?.[0]
+                    ? `${serverApi}/${chosenProduct.coverImages[0]}`
+                    : "/img/default-book.jpg",
+                });
+              }}
+              variant="contained"
+              startIcon={<ShoppingCartIcon />}
+            >
               Add to Cart
             </Button>
             <Button variant="outlined" startIcon={<FavoriteBorderIcon />}>
@@ -60,8 +99,9 @@ export default function ProductDetail() {
           </Stack>
 
           <Typography className="product-stock" mt={2}>
-            {mockBook.stockCount > 0
-              ? `${mockBook.stockCount} in stock`
+            {/*@ts-ignore */}
+            {chosenProduct?.stockCount > 0
+              ? `${chosenProduct?.stockCount} in stock`
               : "Out of stock"}
           </Typography>
         </Box>
