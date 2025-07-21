@@ -229,6 +229,7 @@
 
 /* No Products */
 .products-page .no-products {
+  min-height: 500px;
   text-align: center;
   margin-top: 60px;
 }

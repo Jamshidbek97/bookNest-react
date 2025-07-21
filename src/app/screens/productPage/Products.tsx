@@ -11,6 +11,9 @@ import { BookGenre } from "../../../lib/enums/book.enum";
 import { useHistory } from "react-router-dom";
 import ProductService from "../../services/Product.Service";
 import { serverApi } from "../../../lib/config";
+import Pagination from "@mui/material/Pagination";
+import { PaginationItem } from "@mui/material";
+import { ArrowBack, ArrowForward } from "@mui/icons-material";
 
 /** REDUX SLICE && SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -26,6 +29,8 @@ interface ProductsProps {
 }
 
 export default function Products(props: ProductsProps) {
+  const [selectedGenre, setSelectedGenre] = useState<BookGenre | undefined>();
+
   const { onAdd } = props;
   const { setProducts } = actionDispatch(useDispatch());
   const { products } = useSelector(productsRetriever);
@@ -33,6 +38,7 @@ export default function Products(props: ProductsProps) {
     page: 1,
     limit: 8,
     order: "createdAt",
+    genre: undefined,
     search: "",
   });
 
@@ -49,15 +55,22 @@ export default function Products(props: ProductsProps) {
 
   useEffect(() => {
     if (searchText === "") {
-      productSearch.search = "";
-      setProductSearch({ ...productSearch });
+      setProductSearch((prev) => ({
+        ...prev,
+        page: 1,
+        search: "",
+      }));
     }
   }, [searchText]);
 
-  const searchGenreHandler = (genre: BookGenre) => {
-    productSearch.page = 1;
-    productSearch.genre = genre;
-    setProductSearch({ ...productSearch });
+  const searchGenreHandler = (genre: BookGenre | undefined) => {
+    setSelectedGenre(genre);
+    setProductSearch((prev) => ({
+      ...prev,
+      page: 1,
+      genre,
+      search: "",
+    }));
   };
 
   const searchOrderHandler = (order: string) => {
@@ -67,18 +80,18 @@ export default function Products(props: ProductsProps) {
   };
 
   const searchProductHandler = () => {
-    productSearch.search = searchText;
-    productSearch.genre = undefined;
-    setProductSearch({ ...productSearch });
+    setSelectedGenre(undefined);
+    setProductSearch((prev) => ({
+      ...prev,
+      page: 1,
+      genre: undefined,
+      search: searchText.trim(),
+    }));
   };
 
   const paginationHandler = (e: ChangeEvent<any>, value: number) => {
     productSearch.page = value;
     setProductSearch({ ...productSearch });
-  };
-
-  const chooseDetailHandler = (id: string) => {
-    history.push(`/products/${id}`);
   };
 
   return (
@@ -92,23 +105,63 @@ export default function Products(props: ProductsProps) {
           placeholder="Search books..."
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || "enter") searchProductHandler();
+          }}
           className="search-input"
         />
         <div className="sort-buttons">
-          <button className="sort-button">Newest</button>
-          <button className="sort-button">Price</button>
-          <button className="sort-button">Popularity</button>
+          <button
+            className="sort-button"
+            onClick={() => searchOrderHandler("createdAt")}
+          >
+            Newest
+          </button>
+          <button
+            className="sort-button"
+            onClick={() => searchOrderHandler("price")}
+          >
+            Price
+          </button>
+          <button
+            className="sort-button"
+            onClick={() => searchOrderHandler("bookViews")}
+          >
+            Popularity
+          </button>
         </div>
       </div>
 
       {/* Genre Filter */}
       <div className="left-filters">
-        {["Fiction", "Mystery", "Romance", "Sci-Fi", "Biography"].map(
-          (genre) => (
-            <button key={genre} className="filter-button">
-              {genre}
-            </button>
-          )
+        {["All", "Fiction", "Mystery", "Romance", "Sci-Fi", "Biography"].map(
+          (genreStr) => {
+            const isAll = genreStr === "All";
+            const genreEnum: any = isAll
+              ? undefined
+              : BookGenre[
+                  genreStr
+                    .toUpperCase()
+                    .replace("-", "_") as keyof typeof BookGenre
+                ];
+
+            return (
+              <button
+                key={genreStr}
+                className={`filter-button ${
+                  selectedGenre === genreEnum || (isAll && !selectedGenre)
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() => {
+                  searchGenreHandler(genreEnum);
+                  console.log(genreEnum);
+                }}
+              >
+                {genreStr}
+              </button>
+            );
+          }
         )}
       </div>
 
@@ -133,7 +186,12 @@ export default function Products(props: ProductsProps) {
                 badge = "HOT";
               }
               return (
-                <div key={book._id} className="book-card">
+                <div
+                  key={book._id}
+                  onClick={() => history.push(`/product/${book._id}`)}
+                  style={{ cursor: "pointer" }}
+                  className="book-card"
+                >
                   <div className="image-wrapper">
                     <img src={imageSrc} alt={book.title} />
 
@@ -143,7 +201,20 @@ export default function Products(props: ProductsProps) {
                       </span>
                     )}
                     <div className="hover-overlay">
-                      <button className="basket-btn">
+                      <button
+                        className="basket-btn"
+                        onClick={(e) => {
+                          onAdd({
+                            _id: book._id,
+                            quantity: 1,
+                            title: book.title,
+                            price: book.price,
+                            coverImage: imageSrc,
+                          });
+                          console.log("Button clicked");
+                          e.stopPropagation();
+                        }}
+                      >
                         <ShoppingCartIcon style={{ fontSize: 24 }} />
                       </button>
                     </div>
@@ -164,13 +235,24 @@ export default function Products(props: ProductsProps) {
       </div>
 
       {/* Pagination */}
-      <div className="pagination">
-        <button>{`←`}</button>
-        <button className="active">1</button>
-        <button>2</button>
-        <button>3</button>
-        <button>{`→`}</button>
-      </div>
+      <Pagination
+        className="pagination"
+        count={
+          products.length !== 0 ? productSearch.page + 1 : productSearch.page
+        }
+        page={productSearch.page}
+        color="secondary"
+        onChange={paginationHandler}
+        renderItem={(item) => (
+          <PaginationItem
+            {...item}
+            slots={{
+              previous: ArrowBack,
+              next: ArrowForward,
+            }}
+          />
+        )}
+      />
     </div>
   );
 }

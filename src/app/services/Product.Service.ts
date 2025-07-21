@@ -12,9 +12,10 @@ class ProductService {
   public async getProducts(input: BookInquiry): Promise<Book[]> {
     try {
       let url = `${this.path}/product/all?order=${input.order}&page=${input.page}&limit=${input.limit}`;
-      if (input.genre) url += `&productCollection=${input.genre}`;
+      if (input.genre) url += `&genre=${input.genre}`;
       if (input.search) url += `&search=${input.search}`;
 
+      console.log("Final product query URL:", url);
       const result = await axios.get(url);
 
       return result.data;
