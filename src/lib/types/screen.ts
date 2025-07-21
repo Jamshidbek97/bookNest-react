@@ -21,7 +21,7 @@ export interface HomePageState {
 export interface ProductPageState {
   // FIXME: Need to change member later
   admin: Member | null;
-  chosenProduct: Book | null;
+  productDetail: Book | null;
   products: Book[];
   alsoLike: Book[];
 }

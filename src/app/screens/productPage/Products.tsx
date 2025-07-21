@@ -1,61 +1,85 @@
-import { useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { Box } from "@mui/material";
+import { Dispatch } from "@reduxjs/toolkit";
+import { Book, BookInquiry } from "../../../lib/types/product";
+import { setProducts } from "./slice";
+import { retrieveProducts } from "./selector";
+import { createSelector } from "reselect";
+import { CartItem } from "../../../lib/types/search";
+import { useDispatch, useSelector } from "react-redux";
+import { BookGenre } from "../../../lib/enums/book.enum";
+import { useHistory } from "react-router-dom";
+import ProductService from "../../services/Product.Service";
+import { serverApi } from "../../../lib/config";
 
-const booksData = [
-  {
-    _id: "1",
-    title: "The Midnight Library",
-    author: "Matt Haig",
-    genre: "FICTION",
-    badge: "hot",
-    description: "Describe this book with 50 words",
-    price: 19,
-    bookLikes: 22,
-    coverImages: "img/default-book.jpg",
-  },
-  {
-    _id: "2",
-    title: "Atomic Habits",
-    author: "James Clear",
-    genre: "SELF-HELP",
-    price: 25,
-    bookLikes: 8,
-    description: "Describe this book with 50 words",
+/** REDUX SLICE && SELECTOR */
+const actionDispatch = (dispatch: Dispatch) => ({
+  setProducts: (data: Book[]) => dispatch(setProducts(data)),
+});
 
-    coverImages: "img/default-book.jpg",
-  },
-  {
-    _id: "3",
-    title: "Educated",
-    author: "Tara Westover",
-    genre: "MEMOIR",
-    badge: "bestseller",
-    price: 21,
-    bookLikes: 31,
-    description: "Describe this book with 50 words",
+const productsRetriever = createSelector(retrieveProducts, (products: any) => ({
+  products,
+}));
 
-    coverImages: "img/default-book.jpg",
-  },
-  {
-    _id: "4",
-    title: "Dune",
-    author: "Frank Herbert",
-    genre: "SCI-FI",
-    price: 24,
-    description: "Describe this book with 50 words",
+interface ProductsProps {
+  onAdd: (item: CartItem) => void;
+}
 
-    bookLikes: 10,
-    coverImages: "img/default-book.jpg",
-  },
-];
+export default function Products(props: ProductsProps) {
+  const { onAdd } = props;
+  const { setProducts } = actionDispatch(useDispatch());
+  const { products } = useSelector(productsRetriever);
+  const [productSearch, setProductSearch] = useState<BookInquiry>({
+    page: 1,
+    limit: 8,
+    order: "createdAt",
+    search: "",
+  });
 
-export default function Products() {
-  const [search, setSearch] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const history = useHistory();
 
-  const filteredBooks = booksData.filter((book) =>
-    book.title.toLowerCase().includes(search.toLowerCase())
-  );
+  useEffect(() => {
+    const product = new ProductService();
+    product
+      .getProducts(productSearch)
+      .then((data) => setProducts(data))
+      .catch((err) => console.log(err));
+  }, [productSearch]);
+
+  useEffect(() => {
+    if (searchText === "") {
+      productSearch.search = "";
+      setProductSearch({ ...productSearch });
+    }
+  }, [searchText]);
+
+  const searchGenreHandler = (genre: BookGenre) => {
+    productSearch.page = 1;
+    productSearch.genre = genre;
+    setProductSearch({ ...productSearch });
+  };
+
+  const searchOrderHandler = (order: string) => {
+    productSearch.page = 1;
+    productSearch.order = order;
+    setProductSearch({ ...productSearch });
+  };
+
+  const searchProductHandler = () => {
+    productSearch.search = searchText;
+    productSearch.genre = undefined;
+    setProductSearch({ ...productSearch });
+  };
+
+  const paginationHandler = (e: ChangeEvent<any>, value: number) => {
+    productSearch.page = value;
+    setProductSearch({ ...productSearch });
+  };
+
+  const chooseDetailHandler = (id: string) => {
+    history.push(`/products/${id}`);
+  };
 
   return (
     <div className="products-page">
@@ -66,8 +90,8 @@ export default function Products() {
         <input
           type="text"
           placeholder="Search books..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
           className="search-input"
         />
         <div className="sort-buttons">
@@ -90,38 +114,51 @@ export default function Products() {
 
       {/* Book Grid or Empty State */}
       <div className="products">
-        {filteredBooks.length === 0 ? (
+        {products.length === 0 ? (
           <div className="no-products">
-            <img src="/images/empty-books.png" alt="No books" />
+            <img src="/img/empty.jpg" alt="No books" />
             <p>No books found!</p>
           </div>
         ) : (
           <div className="product-grid">
-            {filteredBooks.map((book) => (
-              <div key={book._id} className="book-card">
-                <div className="image-wrapper">
-                  <img src={book.coverImages} alt={book.title} />
-                  {book.badge && (
-                    <span className={`badge badge-${book.badge.toLowerCase()}`}>
-                      {book.badge}
-                    </span>
-                  )}
-                  <div className="hover-overlay">
-                    <button className="basket-btn">
-                      <ShoppingCartIcon style={{ fontSize: 24 }} />
-                    </button>
+            {products.map((book: any) => {
+              const imageSrc = `${serverApi}/${
+                book.coverImages?.[0] || "img/default-book.jpg"
+              }`;
+
+              let badge;
+              if (book.bookLikes > 1) {
+                badge = "BESTSELLER";
+              } else if (book.bookViews > 1) {
+                badge = "HOT";
+              }
+              return (
+                <div key={book._id} className="book-card">
+                  <div className="image-wrapper">
+                    <img src={imageSrc} alt={book.title} />
+
+                    {badge && (
+                      <span className={`badge badge-${badge.toLowerCase()}`}>
+                        {badge}
+                      </span>
+                    )}
+                    <div className="hover-overlay">
+                      <button className="basket-btn">
+                        <ShoppingCartIcon style={{ fontSize: 24 }} />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="card-text">
+                    <h3>{book.title}</h3>
+                    <p className="author">by {book.author}</p>
+                    <p className="description">
+                      {book.description.slice(0, 50)}...
+                    </p>
+                    <p className="price">${book.price}</p>
                   </div>
                 </div>
-                <div className="card-text">
-                  <h3>{book.title}</h3>
-                  <p className="author">by {book.author}</p>
-                  <p className="description">
-                    {book.description.slice(0, 50)}...
-                  </p>
-                  <p className="price">${book.price}</p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

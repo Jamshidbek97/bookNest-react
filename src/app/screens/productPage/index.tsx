@@ -6,8 +6,14 @@ import Location from "./Location";
 import Testimonials from "./Testimonials";
 import ProductDetail from "./ProductDetail";
 import "../../../css/product.css";
+import { CartItem } from "../../../lib/types/search";
 
-export default function ProductsPage() {
+interface ProductsProps {
+  onAdd: (item: CartItem) => void;
+}
+
+export default function ProductsPage(props: ProductsProps) {
+  const { onAdd } = props;
   const products = useRouteMatch();
   console.log("Products:", products);
 
@@ -20,7 +26,7 @@ export default function ProductsPage() {
 
         <Route path="/products">
           <div className="products">
-            <Products />
+            <Products onAdd={onAdd} />
             <Recommendations />
             <Testimonials />
             <Location />

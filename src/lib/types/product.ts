@@ -16,6 +16,7 @@ export interface Book {
   timesBorrowed?: number;
   bookViews: number;
   bookLikes: number;
+  badge?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
