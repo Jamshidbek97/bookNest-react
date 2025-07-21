@@ -79,7 +79,7 @@ function App() {
         />
       )}
       <Switch>
-        <Route path="/product/all">
+        <Route path="/products">
           <ProductsPage />
         </Route>
         <Route path="/product/:productId">

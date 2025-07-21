@@ -18,7 +18,7 @@
   line-height: 1;
 }
 
-.ducts-page {
+.products-page {
   width: 1300px;
   margin: 0 auto;
   font-family: "Segoe UI", sans-serif;
@@ -500,7 +500,7 @@
 }
 
 /* Detailed products */
-.d-products .product-detail {
+.d-products.product-detail {
   max-width: 1300px;
   margin: 80px auto;
   padding: 0 20px;

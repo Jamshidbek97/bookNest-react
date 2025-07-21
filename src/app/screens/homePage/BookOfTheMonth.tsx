@@ -50,7 +50,7 @@ export default function BookOfTheMonth() {
             color="primary"
             className="cta-button"
             startIcon={<ShoppingCartIcon />}
-            onClick={() => history.push(`/product/all`)}
+            onClick={() => history.push(`/products`)}
           >
             Buy Now
           </Button>
