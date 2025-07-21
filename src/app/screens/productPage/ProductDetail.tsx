@@ -2,6 +2,8 @@ import { Box, Typography, Button, Stack, Chip } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useState } from "react";
+import { Member } from "../../../lib/types/member";
+import { Book } from "../../../lib/types/product";
 
 const mockBook = {
   _id: "686eb04726452961595003da",
@@ -18,13 +20,13 @@ const mockBook = {
   bookLikes: 21,
 };
 
-console.log("Details page");
+/** REDUX SLICE && SELECTOR */
+// const actionDispatch = (dispatch: ReduxDispatch) => ({
+//   setRestaurant: (data: Member) => dispatch(setRestaurant(data)),
+//   setChosenProduct: (data: Book) => dispatch(setChosenProduct(data)),
+// });
 
 export default function ProductDetail() {
-  const [book, setBook] = useState(null);
-
-  // if (!book) return null;
-
   return (
     <Box className="d-products product-detail">
       <Stack direction={{ xs: "column", md: "row" }} spacing={4}>

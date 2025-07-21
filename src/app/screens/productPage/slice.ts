@@ -12,9 +12,9 @@ const productPageSlice = createSlice({
   name: "productsPage",
   initialState,
   reducers: {
-    setAdmin: (state, action) => {
-      state.admin = action.payload;
-    },
+    // setAdmin: (state, action) => {
+    //   state.admin = action.payload;
+    // },
     setProductDetail: (state, action) => {
       state.productDetail = action.payload;
     },
@@ -27,7 +27,7 @@ const productPageSlice = createSlice({
   },
 });
 
-export const { setAdmin, setProductDetail, setProducts, setAlsoLike } =
+export const { setProductDetail, setProducts, setAlsoLike } =
   productPageSlice.actions;
 
 const ProductsPageReducer = productPageSlice.reducer;

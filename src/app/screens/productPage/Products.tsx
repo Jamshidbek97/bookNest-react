@@ -2,7 +2,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Dispatch } from "@reduxjs/toolkit";
 import { Book, BookInquiry } from "../../../lib/types/product";
-import { setProducts } from "./slice";
+import { setAlsoLike, setProductDetail, setProducts } from "./slice";
 import { retrieveProducts } from "./selector";
 import { createSelector } from "reselect";
 import { CartItem } from "../../../lib/types/search";
@@ -18,6 +18,8 @@ import { ArrowBack, ArrowForward } from "@mui/icons-material";
 /** REDUX SLICE && SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
   setProducts: (data: Book[]) => dispatch(setProducts(data)),
+  setAlsoLike: (data: Book[]) => dispatch(setAlsoLike(data)),
+  // setProductDetail: (data: Book[]) => dispatch(setProductDetail(data)),
 });
 
 const productsRetriever = createSelector(retrieveProducts, (products: any) => ({
@@ -32,7 +34,7 @@ export default function Products(props: ProductsProps) {
   const [selectedGenre, setSelectedGenre] = useState<BookGenre | undefined>();
 
   const { onAdd } = props;
-  const { setProducts } = actionDispatch(useDispatch());
+  const { setProducts, setAlsoLike } = actionDispatch(useDispatch());
   const { products } = useSelector(productsRetriever);
   const [productSearch, setProductSearch] = useState<BookInquiry>({
     page: 1,
@@ -51,6 +53,15 @@ export default function Products(props: ProductsProps) {
       .getProducts(productSearch)
       .then((data) => setProducts(data))
       .catch((err) => console.log(err));
+
+    product
+      .getProducts({
+        page: 1,
+        limit: 40,
+        order: "createdAt",
+      })
+      .then((data) => setAlsoLike(data))
+      .catch((err) => console.log("[❌] Error fetching popular books", err));
   }, [productSearch]);
 
   useEffect(() => {

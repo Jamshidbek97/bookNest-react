@@ -3,7 +3,7 @@ import { AppRootState } from "../../../lib/types/screen";
 
 const selectProductsPage = (state: AppRootState) => state.productPage;
 
-export const retrieveRestaurant = createSelector(
+export const retrieveAdmin = createSelector(
   selectProductsPage,
   (ProductsPage) => ProductsPage.admin
 );

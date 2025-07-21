@@ -6,38 +6,27 @@ import "swiper/css/navigation";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import { createSelector } from "reselect";
+import { retrieveAlsoLike } from "./selector";
+import { useDispatch, useSelector } from "react-redux";
+import { serverApi } from "../../../lib/config";
+import { Dispatch } from "@reduxjs/toolkit";
+import { Book, BookInquiry } from "../../../lib/types/product";
+import { setAlsoLike } from "./slice";
+import { useEffect, useState } from "react";
+import ProductService from "../../services/Product.Service";
+import { useHistory } from "react-router-dom";
 
-const recommendations = [
-  {
-    title: "Hot Discount Days",
-    subtitle: "Each Friday we deliver highest discounts",
-    image: "/img/default-book.jpg",
-    badge: "Hot",
-    author: "Chef Deming",
-    time: "30 min ago",
-    location: "Turkey, Istanbul",
-  },
-  {
-    title: "Join us on sns",
-    subtitle: "We are offering healthy book topics on sns",
-    image: "/img/default-book.jpg",
-    badge: "New",
-    author: "Belissimo Agent",
-    time: "A week ago",
-    location: "Europe, France",
-  },
-  {
-    title: "New Project Launch",
-    subtitle: "New books are arriving this month",
-    image: "/img/default-book.jpg",
-    badge: "Popular",
-    author: "Morgan News",
-    time: "5 days ago",
-    location: "USA, Florida",
-  },
-];
+/*********** REDUX SLICE AND SELECTOR ***********/
+const recommendationRetriever = createSelector(
+  retrieveAlsoLike,
+  (alsoLike) => ({ alsoLike })
+);
 
 export default function Recommendations() {
+  const { alsoLike } = useSelector(recommendationRetriever);
+
+  const history = useHistory();
   return (
     <div className="events-frame">
       <Stack className="events-main">
@@ -67,12 +56,18 @@ export default function Recommendations() {
             }}
             speed={800}
           >
-            {recommendations.map((value, index) => (
-              <SwiperSlide key={index}>
+            {alsoLike.map((value, index) => (
+              <SwiperSlide
+                key={index}
+                onClick={() => history.push(`/product/${value._id}`)}
+              >
                 <div className="events-card">
                   <div className="events-img-wrapper">
                     <img
-                      src={value.image}
+                      src={
+                        `${serverApi}/${value.coverImages?.[0]}` ||
+                        "img/default-book.jpg"
+                      }
                       alt={value.title}
                       className="events-img"
                     />
@@ -82,7 +77,7 @@ export default function Recommendations() {
                   <Box className="events-desc">
                     <Typography className="rec-title">{value.title}</Typography>
                     <Typography className="rec-subtitle">
-                      {value.subtitle}
+                      {value.description?.slice(0, 130)} ... Read more
                     </Typography>
 
                     <Box className="event-organizator">
@@ -93,11 +88,22 @@ export default function Recommendations() {
                     <Box className="bott-info">
                       <Box className="bott-info-main">
                         <AccessTimeIcon fontSize="small" />
-                        <span>{value.time}</span>
+
+                        <span>
+                          {/*@ts-ignore */}
+                          {new Date(value.createdAt).toLocaleDateString(
+                            "en-CA",
+                            {
+                              year: "numeric",
+                              month: "2-digit",
+                              day: "2-digit",
+                            }
+                          )}
+                        </span>
                       </Box>
                       <Box className="bott-info-main">
                         <LocationOnIcon fontSize="small" />
-                        <span>{value.location}</span>
+                        <span>Seoul</span>
                       </Box>
                     </Box>
                   </Box>
@@ -111,13 +117,13 @@ export default function Recommendations() {
           <img
             src="/icons/arrow-right.svg"
             className="swiper-button-prev"
+            style={{ transform: "rotate(-180deg)" }}
             alt="Previous"
           />
           <div className="dot-frame-pagination swiper-pagination"></div>
           <img
             src="/icons/arrow-right.svg"
             className="swiper-button-next"
-            style={{ transform: "rotate(-180deg)" }}
             alt="Next"
           />
         </Box>
