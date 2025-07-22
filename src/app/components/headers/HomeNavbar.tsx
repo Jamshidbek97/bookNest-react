@@ -32,6 +32,7 @@ interface HomeNavbarProps {
   onDelete: (item: CartItem) => void;
   onRemove: (item: CartItem) => void;
   onDeleteAll: () => void;
+  handleLogoutRequest: () => void;
 }
 
 export default function HomeNavbar(props: HomeNavbarProps) {
@@ -43,6 +44,7 @@ export default function HomeNavbar(props: HomeNavbarProps) {
     onDelete,
     onDeleteAll,
     onRemove,
+    handleLogoutRequest,
   } = props;
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -185,6 +187,7 @@ export default function HomeNavbar(props: HomeNavbarProps) {
                 onClick={() => {
                   setModalMode("login");
                   setModalOpen(true);
+                  setOpen(false);
                 }}
                 startIcon={<LoginIcon />}
               >
@@ -198,7 +201,7 @@ export default function HomeNavbar(props: HomeNavbarProps) {
                     src={
                       authMember?.memberImage
                         ? `${serverApi}/uploads/members/${authMember.memberImage}`
-                        : "icons/default-user.svg"
+                        : "/img/member.jpg"
                     }
                     style={{ cursor: "pointer" }}
                     onClick={toggleMenu}
@@ -209,7 +212,7 @@ export default function HomeNavbar(props: HomeNavbarProps) {
                     <div className="avatar-dropdown">
                       <button
                         className="logout-button"
-                        // onClick={onLogout}
+                        onClick={handleLogoutRequest}
                       >
                         Logout
                       </button>

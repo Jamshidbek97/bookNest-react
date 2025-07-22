@@ -16,10 +16,11 @@ import PersonIcon from "@mui/icons-material/Person";
 import LoginIcon from "@mui/icons-material/Login";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Basket from "./Basket";
 import { CartItem } from "../../../lib/types/search";
 import { useGlobals } from "../../hooks/useGlobals";
+import { serverApi } from "../../../lib/config";
 
 interface OtherNavbarProps {
   modalOpen: boolean;
@@ -31,12 +32,15 @@ interface OtherNavbarProps {
   onDelete: (item: CartItem) => void;
   onRemove: (item: CartItem) => void;
   onDeleteAll: () => void;
+  handleLogoutRequest: () => void;
 }
 
 export default function OtherNavbar(props: OtherNavbarProps) {
   const history = useHistory();
   const { authMember } = useGlobals();
   const [darkMode, setDarkMode] = useState(false);
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
   const {
     setModalOpen,
     setModalMode,
@@ -45,6 +49,7 @@ export default function OtherNavbar(props: OtherNavbarProps) {
     onDelete,
     onDeleteAll,
     onRemove,
+    handleLogoutRequest,
   } = props;
 
   const StyledNavLink = styled(NavLink)(({ theme }) => ({
@@ -70,9 +75,17 @@ export default function OtherNavbar(props: OtherNavbarProps) {
     },
   }));
 
-  const goProducts = () => {
-    history.push("/products");
-  };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const toggleMenu = () => setOpen((prev) => !prev);
 
   const toggleDarkMode = () => {
     setDarkMode((prev) => !prev);
@@ -161,7 +174,7 @@ export default function OtherNavbar(props: OtherNavbarProps) {
               label={darkMode ? <Brightness4Icon /> : <Brightness7Icon />}
               labelPlacement="start"
             />
-            {!authMember && (
+            {!authMember ? (
               <Button
                 variant="contained"
                 color="primary"
@@ -169,11 +182,39 @@ export default function OtherNavbar(props: OtherNavbarProps) {
                 onClick={() => {
                   setModalMode("login");
                   setModalOpen(true);
+                  setOpen(false);
                 }}
                 startIcon={<LoginIcon />}
               >
                 Login
               </Button>
+            ) : (
+              <Box>
+                <div className="user-avatar-wrapper" ref={menuRef}>
+                  <img
+                    className="user-avatar"
+                    src={
+                      authMember?.memberImage
+                        ? `${serverApi}/uploads/members/${authMember.memberImage}`
+                        : "/img/member.jpg"
+                    }
+                    style={{ cursor: "pointer" }}
+                    onClick={toggleMenu}
+                    aria-haspopup="true"
+                    alt="User Avatar"
+                  />
+                  {open && (
+                    <div className="avatar-dropdown">
+                      <button
+                        className="logout-button"
+                        onClick={handleLogoutRequest}
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </Box>
             )}
           </Stack>
         </Stack>

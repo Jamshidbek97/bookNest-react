@@ -15,6 +15,9 @@ import "../css/navbar.css";
 import "../css/footer.css";
 import AuthenticationModal from "./components/auth";
 import ProductDetail from "./screens/productPage/ProductDetail";
+import MemberService from "./services/MemberService";
+import { sweetErrorHandling, sweetTopSuccessAlert } from "../lib/sweetAlert";
+import { Messages } from "../lib/config";
 
 type Mode = "login" | "signup";
 
@@ -25,20 +28,22 @@ function App() {
   const location = useLocation();
   const { cartItems, onAdd, onDelete, onDeleteAll, onRemove } = useBasket();
 
+  /********* Handlers **********/
   const openModal = (mode: Mode) => {
     setModalMode(mode);
     setModalOpen(true);
   };
 
-  /********* Handlers **********/
-
   const handleLogoutRequest = async () => {
     try {
-      // TODO:
+      const member = new MemberService();
+      await member.logout();
+
+      await sweetTopSuccessAlert("Success", 700);
+      setAuthMember(null);
     } catch (err) {
-      // FIXME:
-      // BUG:
-      // NOTE:
+      console.log(err);
+      sweetErrorHandling(Messages.error1);
     }
   };
 
@@ -55,11 +60,7 @@ function App() {
           onDelete={onDelete}
           onRemove={onRemove}
           onDeleteAll={onDeleteAll}
-
-          // anchorEl={anchorEl}
-          // handleLogoutClick={handleLogoutClick}
-          // handleCloseLogout={handleCloseLogout}
-          // handleLogoutRequest={handleLogoutRequest}
+          handleLogoutRequest={handleLogoutRequest}
         />
       ) : (
         <OtherNavbar
@@ -72,10 +73,7 @@ function App() {
           onDelete={onDelete}
           onRemove={onRemove}
           onDeleteAll={onDeleteAll}
-
-          // handleLogoutClick={handleLogoutClick}
-          // handleCloseLogout={handleCloseLogout}
-          // handleLogoutRequest={handleLogoutRequest}
+          handleLogoutRequest={handleLogoutRequest}
         />
       )}
       <Switch>
