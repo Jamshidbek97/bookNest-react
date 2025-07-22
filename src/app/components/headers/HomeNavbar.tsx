@@ -19,6 +19,7 @@ import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { useState } from "react";
 import Basket from "./Basket";
 import { CartItem } from "../../../lib/types/search";
+import { useGlobals } from "../../hooks/useGlobals";
 
 interface HomeNavbarProps {
   modalOpen: boolean;
@@ -43,7 +44,8 @@ export default function HomeNavbar(props: HomeNavbarProps) {
     onRemove,
   } = props;
   const history = useHistory();
-  const authMember = true; // Replace this with real auth logic
+  const { authMember } = useGlobals();
+
   const [darkMode, setDarkMode] = useState(false);
 
   const StyledNavLink = styled(NavLink)(({ theme }) => ({

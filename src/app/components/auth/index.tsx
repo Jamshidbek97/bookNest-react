@@ -31,6 +31,11 @@ import {
   PersonAdd,
   Edit as EditIcon,
 } from "@mui/icons-material";
+import { LoginInput, MemberInput } from "../../../lib/types/member";
+import { useGlobals } from "../../hooks/useGlobals";
+import { Messages } from "../../../lib/config";
+import { sweetErrorHandling } from "../../../lib/sweetAlert";
+import MemberService from "../../services/MemberService";
 
 // Define types
 type Mode = "login" | "signup";
@@ -74,7 +79,9 @@ const AuthenticationModal: React.FC<AuthModalProps> = ({
   });
   const [errors, setErrors] = useState<ErrorMessages>({});
   const [isLoading, setIsLoading] = useState(false);
+  const { setAuthMember } = useGlobals();
 
+  /** HANDLERS **/
   const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
@@ -161,16 +168,39 @@ const AuthenticationModal: React.FC<AuthModalProps> = ({
 
     setIsLoading(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // simulate API call
+    try {
+      const memberService = new MemberService();
 
-    const submitData = {
-      ...formData,
-      profileImage,
-    };
+      if (mode === "signup") {
+        const signupInput: MemberInput = {
+          memberNick: formData.username,
+          memberPhone: formData.phone,
+          memberEmail: formData.email,
+          memberPassword: formData.password,
+        };
 
-    console.log(`${mode} attempt:`, submitData);
-    setIsLoading(false);
-    onClose();
+        const result = await memberService.signup(signupInput);
+        setAuthMember(result);
+      } else if (mode === "login") {
+        if (!validateForm()) return;
+        const loginInput: LoginInput = {
+          identifier: formData.username,
+          memberPassword: formData.password,
+        };
+
+        const result = await memberService.login(loginInput);
+        setAuthMember(result);
+      }
+
+      console.log(`${mode} success`);
+      onClose();
+    } catch (err) {
+      console.error(`${mode} failed`, err);
+      sweetErrorHandling(err).then();
+      onClose();
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {

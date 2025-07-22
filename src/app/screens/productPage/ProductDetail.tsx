@@ -2,7 +2,6 @@ import { Box, Typography, Button, Stack, Chip } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useEffect, useState } from "react";
-import { Member } from "../../../lib/types/member";
 import { Book } from "../../../lib/types/product";
 import { createSelector, Dispatch } from "@reduxjs/toolkit";
 import { setProductDetail } from "./slice";
