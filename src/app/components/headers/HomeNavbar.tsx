@@ -16,7 +16,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import LoginIcon from "@mui/icons-material/Login";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Basket from "./Basket";
 import { CartItem } from "../../../lib/types/search";
 import { useGlobals } from "../../hooks/useGlobals";
@@ -44,10 +44,24 @@ export default function HomeNavbar(props: HomeNavbarProps) {
     onDeleteAll,
     onRemove,
   } = props;
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
   const history = useHistory();
   const { authMember } = useGlobals();
 
   const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const toggleMenu = () => setOpen((prev) => !prev);
 
   const StyledNavLink = styled(NavLink)(({ theme }) => ({
     textDecoration: "none",
@@ -71,8 +85,6 @@ export default function HomeNavbar(props: HomeNavbarProps) {
       backgroundColor: theme.palette.primary.main,
     },
   }));
-
-  console.log("image address", `${serverApi}/${authMember?.memberImage}`);
 
   const goProducts = () => {
     history.push("/products");
@@ -180,17 +192,30 @@ export default function HomeNavbar(props: HomeNavbarProps) {
               </Button>
             ) : (
               <Box>
-                <img
-                  className="user-avatar"
-                  src={
-                    authMember?.memberImage
-                      ? `${serverApi}/uploads/members/${authMember.memberImage}`
-                      : "icons/default-user.svg"
-                  }
-                  style={{ cursor: "pointer" }}
-                  aria-haspopup={"true"}
-                  // onClick={handleLogoutClick}
-                ></img>
+                <div className="user-avatar-wrapper" ref={menuRef}>
+                  <img
+                    className="user-avatar"
+                    src={
+                      authMember?.memberImage
+                        ? `${serverApi}/uploads/members/${authMember.memberImage}`
+                        : "icons/default-user.svg"
+                    }
+                    style={{ cursor: "pointer" }}
+                    onClick={toggleMenu}
+                    aria-haspopup="true"
+                    alt="User Avatar"
+                  />
+                  {open && (
+                    <div className="avatar-dropdown">
+                      <button
+                        className="logout-button"
+                        // onClick={onLogout}
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
               </Box>
             )}
           </Stack>

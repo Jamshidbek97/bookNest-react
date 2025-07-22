@@ -130,3 +130,52 @@
   flex-direction: column;
   gap: 50px;
 }
+
+/* newly added for user avatar */
+/* Avatar wrapper (for positioning relative dropdown) */
+.user-avatar-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* Avatar image style */
+.user-avatar {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.user-avatar:hover {
+  border-color: #666;
+}
+
+/* Dropdown menu style */
+.avatar-dropdown {
+  position: absolute;
+  top: 48px; /* slightly below avatar */
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 8px 12px;
+  z-index: 999;
+}
+
+/* Logout button */
+.logout-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.logout-button:hover {
+  background-color: #d32f2f;
+}
