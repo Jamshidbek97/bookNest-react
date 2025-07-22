@@ -37,7 +37,7 @@ class MemberService {
     }
   }
 
-  public async signup(input: MemberInput): Promise<Member> {
+  public async signup(input: FormData): Promise<Member> {
     try {
       const url = this.path + "/member/signup";
       const result = await axios.post(url, input, { withCredentials: true });

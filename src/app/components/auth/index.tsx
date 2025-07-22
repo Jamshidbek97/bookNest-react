@@ -33,7 +33,6 @@ import {
 } from "@mui/icons-material";
 import { LoginInput, MemberInput } from "../../../lib/types/member";
 import { useGlobals } from "../../hooks/useGlobals";
-import { Messages } from "../../../lib/config";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import MemberService from "../../services/MemberService";
 
@@ -172,14 +171,17 @@ const AuthenticationModal: React.FC<AuthModalProps> = ({
       const memberService = new MemberService();
 
       if (mode === "signup") {
-        const signupInput: MemberInput = {
-          memberNick: formData.username,
-          memberPhone: formData.phone,
-          memberEmail: formData.email,
-          memberPassword: formData.password,
-        };
+        const form = new FormData();
+        form.append("memberNick", formData.username);
+        form.append("memberPhone", formData.phone);
+        form.append("memberEmail", formData.email);
+        form.append("memberPassword", formData.password);
 
-        const result = await memberService.signup(signupInput);
+        if (profileImage) {
+          form.append("memberImage", profileImage);
+        }
+
+        const result = await memberService.signup(form);
         setAuthMember(result);
       } else if (mode === "login") {
         if (!validateForm()) return;

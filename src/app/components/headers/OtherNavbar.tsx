@@ -35,7 +35,7 @@ interface OtherNavbarProps {
 
 export default function OtherNavbar(props: OtherNavbarProps) {
   const history = useHistory();
-  const authMember = useGlobals();
+  const { authMember } = useGlobals();
   const [darkMode, setDarkMode] = useState(false);
   const {
     setModalOpen,

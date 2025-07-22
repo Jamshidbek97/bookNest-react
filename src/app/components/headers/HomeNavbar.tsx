@@ -20,6 +20,7 @@ import { useState } from "react";
 import Basket from "./Basket";
 import { CartItem } from "../../../lib/types/search";
 import { useGlobals } from "../../hooks/useGlobals";
+import { serverApi } from "../../../lib/config";
 
 interface HomeNavbarProps {
   modalOpen: boolean;
@@ -70,6 +71,8 @@ export default function HomeNavbar(props: HomeNavbarProps) {
       backgroundColor: theme.palette.primary.main,
     },
   }));
+
+  console.log("image address", `${serverApi}/${authMember?.memberImage}`);
 
   const goProducts = () => {
     history.push("/products");
@@ -162,7 +165,7 @@ export default function HomeNavbar(props: HomeNavbarProps) {
               label={darkMode ? <Brightness4Icon /> : <Brightness7Icon />}
               labelPlacement="start"
             />
-            {!authMember && (
+            {!authMember ? (
               <Button
                 variant="contained"
                 color="primary"
@@ -175,6 +178,20 @@ export default function HomeNavbar(props: HomeNavbarProps) {
               >
                 Login
               </Button>
+            ) : (
+              <Box>
+                <img
+                  className="user-avatar"
+                  src={
+                    authMember?.memberImage
+                      ? `${serverApi}/uploads/members/${authMember.memberImage}`
+                      : "icons/default-user.svg"
+                  }
+                  style={{ cursor: "pointer" }}
+                  aria-haspopup={"true"}
+                  // onClick={handleLogoutClick}
+                ></img>
+              </Box>
             )}
           </Stack>
         </Stack>
