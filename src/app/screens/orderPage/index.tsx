@@ -1,5 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "../../../css/orderPage.css";
+import { Dispatch } from "@reduxjs/toolkit";
+import { setFinishedOrders, setPausedOrders, setProcessOrders } from "./slice";
+import { useHistory } from "react-router-dom";
+import { useGlobals } from "../../hooks/useGlobals";
+import { serverApi } from "../../../lib/config";
+
+/** Redux Slice & Selector */
+const actionDispatch = (dispatch: Dispatch) => ({
+  setPausedOrders: (data: Order[]) => dispatch(setPausedOrders(data)),
+  setProcessOrders: (data: Order[]) => dispatch(setProcessOrders(data)),
+  setFinishedOrders: (data: Order[]) => dispatch(setFinishedOrders(data)),
+});
 
 interface Book {
   id: string;
@@ -32,13 +44,15 @@ interface User {
 }
 
 const OrderPage: React.FC = () => {
+  const { orderBuilder, authMember } = useGlobals();
+  const history = useHistory();
+
   const [activeTab, setActiveTab] = useState<
     "pending" | "processing" | "delivered"
   >("pending");
   const [orders, setOrders] = useState<Order[]>([]);
   const [user, setUser] = useState<User | null>(null);
 
-  // Mock data - replace with actual API calls
   useEffect(() => {
     const mockUser: User = {
       id: "1",
@@ -168,6 +182,8 @@ const OrderPage: React.FC = () => {
     console.log("Reordering:", order);
   };
 
+  if (!authMember) history.push("/");
+
   return (
     <div className="order-page">
       <div className="order-header">
@@ -287,33 +303,33 @@ const OrderPage: React.FC = () => {
         </div>
 
         <div className="order-sidebar">
-          {user && (
+          {authMember && (
             <div className="user-info-card">
               <div className="user-avatar">
                 <img
-                  src={user.memberImage || "/icons/default-user.svg"}
+                  src={
+                    authMember?.memberImage?.startsWith("uploads/")
+                      ? `${serverApi}/${authMember.memberImage}`
+                      : `${serverApi}/uploads/members/${authMember.memberImage}`
+                  }
                   alt="User Avatar"
                 />
-                <div className="user-type-badge">
-                  {user.memberType === "READER" && "📖"}
-                  {user.memberType === "AUTHOR" && "✍️"}
-                  {user.memberType === "PUBLISHER" && "🏢"}
-                </div>
+                <div className="user-type-badge">📖</div>
               </div>
-              <h3>{user.memberNick}</h3>
-              <p className="user-type">{user.memberType}</p>
+              <h3>{authMember.memberNick}</h3>
+              <p className="user-type">{authMember.memberType}</p>
               <div className="user-details">
                 <div className="detail-item">
                   <span className="icon">📧</span>
-                  <span>{user.memberEmail}</span>
+                  <span>{authMember.memberEmail}</span>
                 </div>
                 <div className="detail-item">
                   <span className="icon">📞</span>
-                  <span>{user.memberPhone}</span>
+                  <span>{authMember.memberPhone}</span>
                 </div>
                 <div className="detail-item">
                   <span className="icon">📍</span>
-                  <span>{user.memberAddress}</span>
+                  <span>123 Reading St, Booktown, BT 12345</span>
                 </div>
               </div>
             </div>
