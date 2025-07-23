@@ -26,6 +26,7 @@ export interface Order {
   orderStatus: OrderStatus;
   createdAt: Date;
   updatedAt: Date;
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
   //   from aggregation
   orderItems: OrderItem[];
   productData: Book[];

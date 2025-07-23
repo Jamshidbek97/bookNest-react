@@ -5,6 +5,10 @@ import { setFinishedOrders, setPausedOrders, setProcessOrders } from "./slice";
 import { useHistory } from "react-router-dom";
 import { useGlobals } from "../../hooks/useGlobals";
 import { serverApi } from "../../../lib/config";
+import { OrderStatus } from "../../../lib/enums/order.enum";
+import { useDispatch } from "react-redux";
+import { Order, OrderInquiry } from "../../../lib/types/order";
+import OrderService from "../../services/Order.Service";
 
 /** Redux Slice & Selector */
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -22,118 +26,121 @@ interface Book {
   isbn: string;
 }
 
-interface Order {
-  id: string;
-  orderNumber: string;
-  books: Book[];
-  totalPrice: number;
-  orderDate: string;
-  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
-  shippingAddress: string;
-  estimatedDelivery?: string;
-}
+// interface Order {
 
-interface User {
-  id: string;
-  memberNick: string;
-  memberEmail: string;
-  memberPhone: string;
-  memberAddress: string;
-  memberImage?: string;
-  memberType: "READER" | "AUTHOR" | "PUBLISHER";
-}
+//   orderNumber: string;
+//   books: Book[];
+//   totalPrice: number;
+//   orderDate: string;
+//   status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+//   shippingAddress: string;
+//   estimatedDelivery?: string;
+// }
 
 const OrderPage: React.FC = () => {
+  const { setPausedOrders, setProcessOrders, setFinishedOrders } =
+    actionDispatch(useDispatch());
   const { orderBuilder, authMember } = useGlobals();
   const history = useHistory();
+  const [orderInquiry, setOrderInquiry] = useState<OrderInquiry>({
+    page: 1,
+    limit: 5,
+    orderStatus: OrderStatus.PAUSE,
+  });
+
+  useEffect(() => {
+    const order = new OrderService();
+    order
+      .getMyOrders({ ...orderInquiry, orderStatus: OrderStatus.PAUSE })
+      .then((data) => setPausedOrders(data))
+      .catch((err) => console.log(err));
+
+    order
+      .getMyOrders({ ...orderInquiry, orderStatus: OrderStatus.PROCESS })
+      .then((data) => setProcessOrders(data))
+      .catch((err) => console.log(err));
+
+    order
+      .getMyOrders({ ...orderInquiry, orderStatus: OrderStatus.FINISH })
+      .then((data) => setFinishedOrders(data))
+      .catch((err) => console.log(err));
+  }, [orderInquiry, orderBuilder]);
 
   const [activeTab, setActiveTab] = useState<
     "pending" | "processing" | "delivered"
   >("pending");
   const [orders, setOrders] = useState<Order[]>([]);
-  const [user, setUser] = useState<User | null>(null);
 
-  useEffect(() => {
-    const mockUser: User = {
-      id: "1",
-      memberNick: "BookLover123",
-      memberEmail: "booklover@example.com",
-      memberPhone: "+1-234-567-8900",
-      memberAddress: "123 Reading St, Booktown, BT 12345",
-      memberImage: "/img/member2.jpg",
-      memberType: "READER",
-    };
+  // useEffect(() => {
+  //   const mockOrders: Order[] = [
+  //     {
+  //       id: "1",
+  //       orderNumber: "BN2024001",
+  //       books: [
+  //         {
+  //           id: "1",
+  //           title: "The Great Gatsby",
+  //           author: "F. Scott Fitzgerald",
+  //           price: 12.99,
+  //           image: "/img/default-book.jpg",
+  //           isbn: "978-0-7432-7356-5",
+  //         },
+  //         {
+  //           id: "2",
+  //           title: "To Kill a Mockingbird",
+  //           author: "Harper Lee",
+  //           price: 14.99,
+  //           image: "/books/mockingbird.jpg",
+  //           isbn: "978-0-06-112008-4",
+  //         },
+  //       ],
+  //       totalPrice: 27.98,
+  //       orderDate: "2024-01-15",
+  //       status: "pending",
+  //       shippingAddress: "123 Reading St, Booktown, BT 12345",
+  //       estimatedDelivery: "2024-01-22",
+  //     },
+  //     {
+  //       id: "2",
+  //       orderNumber: "BN2024002",
+  //       books: [
+  //         {
+  //           id: "3",
+  //           title: "1984",
+  //           author: "George Orwell",
+  //           price: 13.99,
+  //           image: "/books/1984.jpg",
+  //           isbn: "978-0-452-28423-4",
+  //         },
+  //       ],
+  //       totalPrice: 13.99,
+  //       orderDate: "2024-01-10",
+  //       status: "processing",
+  //       shippingAddress: "123 Reading St, Booktown, BT 12345",
+  //       estimatedDelivery: "2024-01-18",
+  //     },
+  //     {
+  //       id: "3",
+  //       orderNumber: "BN2024003",
+  //       books: [
+  //         {
+  //           id: "4",
+  //           title: "Pride and Prejudice",
+  //           author: "Jane Austen",
+  //           price: 11.99,
+  //           image: "/books/pride.jpg",
+  //           isbn: "978-0-14-143951-8",
+  //         },
+  //       ],
+  //       totalPrice: 11.99,
+  //       orderDate: "2024-01-05",
+  //       status: "delivered",
+  //       shippingAddress: "123 Reading St, Booktown, BT 12345",
+  //     },
+  //   ];
 
-    const mockOrders: Order[] = [
-      {
-        id: "1",
-        orderNumber: "BN2024001",
-        books: [
-          {
-            id: "1",
-            title: "The Great Gatsby",
-            author: "F. Scott Fitzgerald",
-            price: 12.99,
-            image: "/img/default-book.jpg",
-            isbn: "978-0-7432-7356-5",
-          },
-          {
-            id: "2",
-            title: "To Kill a Mockingbird",
-            author: "Harper Lee",
-            price: 14.99,
-            image: "/books/mockingbird.jpg",
-            isbn: "978-0-06-112008-4",
-          },
-        ],
-        totalPrice: 27.98,
-        orderDate: "2024-01-15",
-        status: "pending",
-        shippingAddress: "123 Reading St, Booktown, BT 12345",
-        estimatedDelivery: "2024-01-22",
-      },
-      {
-        id: "2",
-        orderNumber: "BN2024002",
-        books: [
-          {
-            id: "3",
-            title: "1984",
-            author: "George Orwell",
-            price: 13.99,
-            image: "/books/1984.jpg",
-            isbn: "978-0-452-28423-4",
-          },
-        ],
-        totalPrice: 13.99,
-        orderDate: "2024-01-10",
-        status: "processing",
-        shippingAddress: "123 Reading St, Booktown, BT 12345",
-        estimatedDelivery: "2024-01-18",
-      },
-      {
-        id: "3",
-        orderNumber: "BN2024003",
-        books: [
-          {
-            id: "4",
-            title: "Pride and Prejudice",
-            author: "Jane Austen",
-            price: 11.99,
-            image: "/books/pride.jpg",
-            isbn: "978-0-14-143951-8",
-          },
-        ],
-        totalPrice: 11.99,
-        orderDate: "2024-01-05",
-        status: "delivered",
-        shippingAddress: "123 Reading St, Booktown, BT 12345",
-      },
-    ];
-
-    setUser(mockUser);
-    setOrders(mockOrders);
-  }, []);
+  //   setOrders(mockOrders);
+  // }, []);
 
   const getFilteredOrders = () => {
     return orders.filter((order) => {
@@ -170,7 +177,7 @@ const OrderPage: React.FC = () => {
   const handleCancelOrder = (orderId: string) => {
     setOrders(
       orders.map((order) =>
-        order.id === orderId
+        order._id === orderId
           ? { ...order, status: "cancelled" as const }
           : order
       )
@@ -222,16 +229,16 @@ const OrderPage: React.FC = () => {
             </div>
           ) : (
             getFilteredOrders().map((order) => (
-              <div key={order.id} className="order-card">
+              <div key={order._id} className="order-card">
                 <div className="order-header-info">
                   <div className="order-number">
                     <span className="label">Order #</span>
-                    <span className="value">{order.orderNumber}</span>
+                    <span className="value">BN2024001</span>
                   </div>
                   <div className="order-date">
                     <span className="label">Order Date</span>
                     <span className="value">
-                      {new Date(order.orderDate).toLocaleDateString()}
+                      {new Date(order.createdAt).toLocaleDateString()}
                     </span>
                   </div>
                   <div className="order-status">
@@ -239,22 +246,22 @@ const OrderPage: React.FC = () => {
                       className="status-badge"
                       style={{ backgroundColor: getStatusColor(order.status) }}
                     >
-                      {order.status.charAt(0).toUpperCase() +
-                        order.status.slice(1)}
+                      {order.status?.charAt(0).toUpperCase() +
+                        order.status?.slice(1)}
                     </span>
                   </div>
                 </div>
 
                 <div className="order-books">
-                  {order.books.map((book) => (
-                    <div key={book.id} className="book-item">
+                  {order.productData.map((book) => (
+                    <div key={book._id} className="book-item">
                       <div className="book-image">
-                        <img src={book.image} alt={book.title} />
+                        <img src={book?.coverImages?.[0]} alt={book.title} />
                       </div>
                       <div className="book-info">
                         <h4>{book.title}</h4>
                         <p>by {book.author}</p>
-                        <span className="isbn">ISBN: {book.isbn}</span>
+                        <span className="isbn">ISBN: 978-0-14-143951-8</span>
                       </div>
                       <div className="book-price">${book.price}</div>
                     </div>
@@ -265,14 +272,14 @@ const OrderPage: React.FC = () => {
                   <div className="order-total">
                     <span className="total-label">Total: </span>
                     <span className="total-amount">
-                      ${order.totalPrice.toFixed(2)}
+                      ${order.orderTotal.toFixed(2)}
                     </span>
                   </div>
                   <div className="order-actions">
                     {order.status === "pending" && (
                       <button
                         className="cancel-btn"
-                        onClick={() => handleCancelOrder(order.id)}
+                        onClick={() => handleCancelOrder(order._id)}
                       >
                         Cancel Order
                       </button>
@@ -289,14 +296,12 @@ const OrderPage: React.FC = () => {
                   </div>
                 </div>
 
-                {order.estimatedDelivery && (
-                  <div className="delivery-info">
-                    <span className="delivery-label">Estimated Delivery: </span>
-                    <span className="delivery-date">
-                      {new Date(order.estimatedDelivery).toLocaleDateString()}
-                    </span>
-                  </div>
-                )}
+                <div className="delivery-info">
+                  <span className="delivery-label">Estimated Delivery: </span>
+                  <span className="delivery-date">
+                    {new Date(order.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
               </div>
             ))
           )}
