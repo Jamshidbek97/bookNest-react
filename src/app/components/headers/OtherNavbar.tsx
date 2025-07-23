@@ -194,9 +194,9 @@ export default function OtherNavbar(props: OtherNavbarProps) {
                   <img
                     className="user-avatar"
                     src={
-                      authMember?.memberImage
-                        ? `${serverApi}/uploads/members/${authMember.memberImage}`
-                        : "/img/member.jpg"
+                      authMember?.memberImage?.startsWith("uploads/")
+                        ? `${serverApi}/${authMember.memberImage}`
+                        : `${serverApi}/uploads/members/${authMember.memberImage}`
                     }
                     style={{ cursor: "pointer" }}
                     onClick={toggleMenu}

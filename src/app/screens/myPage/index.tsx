@@ -1,5 +1,15 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import "../../../css/myPage.css";
+import { useGlobals } from "../../hooks/useGlobals";
+import { serverApi } from "../../../lib/config";
+import { MemberUpdateInput } from "../../../lib/types/member";
+import { T } from "../../../lib/types/common";
+import MemberService from "../../services/MemberService";
+import {
+  sweetErrorHandling,
+  sweetTopSuccessAlert,
+} from "../../../lib/sweetAlert";
+import { useHistory } from "react-router-dom";
 
 interface MemberData {
   memberNick: string;
@@ -22,23 +32,99 @@ const MyPage: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<MemberData>({ ...memberData });
   const [showPassword, setShowPassword] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [profileFile, setProfileFile] = useState<File | null>(null);
+  const { authMember, setAuthMember } = useGlobals();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
+  const [memberUpdateInput, setMemberUpdateInput] = useState<MemberUpdateInput>(
+    {
+      memberNick: authMember?.memberNick,
+      memberPhone: authMember?.memberPhone,
+      memberEmail: authMember?.memberEmail,
+      memberDesc: authMember?.memberDesc,
+      memberImage: authMember?.memberImage,
+      memberPassword: authMember?.memberPassword,
+    }
+  );
+
+  /** HANDLERS **/
+  const memberNickHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setMemberUpdateInput((prev) => ({
       ...prev,
-      [name]: value,
+      memberNick: e.target.value,
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const memberPhoneHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setMemberUpdateInput((prev) => ({
+      ...prev,
+      memberPhone: e.target.value,
+    }));
+  };
+
+  const memberEmailHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setMemberUpdateInput((prev) => ({
+      ...prev,
+      memberEmail: e.target.value,
+    }));
+  };
+
+  const memberDescHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setMemberUpdateInput((prev) => ({
+      ...prev,
+      memberDesc: e.target.value,
+    }));
+  };
+
+  const memberPasswordHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setMemberUpdateInput((prev) => ({
+      ...prev,
+      memberPassword: e.target.value,
+    }));
+  };
+
+  const stripEmptyFields = <T extends Record<string, any>>(
+    input: T
+  ): Partial<T> => {
+    return Object.fromEntries(
+      Object.entries(input).filter(
+        ([_, value]) => value !== undefined && value !== ""
+      )
+    ) as Partial<T>;
+  };
+
+  const submitButton = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMemberData({ ...formData });
-    setIsEditing(false);
-    // Here you would typically make an API call to update the user data
-    console.log("Updated member data:", formData);
+    try {
+      setIsSubmitting(true);
+
+      // 1. Remove empty fields like password: ""
+      const cleanedInput = stripEmptyFields(memberUpdateInput);
+
+      // 2. Create FormData and append non-empty fields
+      const formData = new FormData();
+      Object.entries(cleanedInput).forEach(([key, value]: any) => {
+        formData.append(key, value);
+      });
+
+      // 3. Conditionally append profile image
+      if (profileFile) {
+        formData.append("memberImage", profileFile);
+      }
+
+      // 4. Send FormData to service
+      const result = await new MemberService().updateMember(formData);
+
+      // 5. Success handling
+      setAuthMember(result);
+      sweetTopSuccessAlert("Information updated successfully", 800);
+    } catch (error) {
+      await sweetErrorHandling(error);
+    } finally {
+      setIsSubmitting(false);
+      setIsEditing(false);
+    }
   };
 
   const handleCancel = () => {
@@ -52,6 +138,10 @@ const MyPage: React.FC = () => {
       setFormData({ ...memberData });
     }
   };
+
+  const history = useHistory();
+
+  if (!authMember) history.push("/home");
 
   return (
     <div className="mypage-container">
@@ -73,35 +163,55 @@ const MyPage: React.FC = () => {
           {!isEditing ? (
             <div className="info-display">
               <div className="info-item">
+                <span className="info-label">Profile Image:</span>
+                <img
+                  src={
+                    authMember?.memberImage?.startsWith("uploads/")
+                      ? `${serverApi}/${authMember.memberImage}`
+                      : `${serverApi}/uploads/members/${authMember?.memberImage}`
+                  }
+                  alt="Profile"
+                  className="profile-image"
+                />
+              </div>
+
+              <div className="info-item">
                 <span className="info-label">Nickname:</span>
-                <span className="info-value">{memberData.memberNick}</span>
+                <span className="info-value">
+                  {authMember?.memberNick
+                    ? authMember.memberNick
+                    : memberData.memberNick}
+                </span>
               </div>
               <div className="info-item">
                 <span className="info-label">Phone:</span>
-                <span className="info-value">{memberData.memberPhone}</span>
+                <span className="info-value">
+                  {authMember?.memberPhone
+                    ? authMember?.memberPhone
+                    : memberData.memberPhone}
+                </span>
               </div>
               <div className="info-item">
                 <span className="info-label">Email:</span>
-                <span className="info-value">{memberData.memberEmail}</span>
+                <span className="info-value">
+                  {authMember?.memberEmail ?? memberData.memberEmail}{" "}
+                </span>
               </div>
               <div className="info-item">
                 <span className="info-label">Description:</span>
-                <span className="info-value">
-                  {memberData.memberDescription}
-                </span>
+                <span className="info-value">{authMember?.memberDesc}</span>
               </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="edit-form">
+            <form onSubmit={submitButton} className="edit-form">
               <div className="form-group">
                 <label htmlFor="memberNick">Nickname</label>
                 <input
                   type="text"
                   id="memberNick"
                   name="memberNick"
-                  value={formData.memberNick}
-                  onChange={handleInputChange}
-                  required
+                  value={memberUpdateInput?.memberNick || ""}
+                  onChange={memberNickHandler}
                 />
               </div>
 
@@ -111,9 +221,8 @@ const MyPage: React.FC = () => {
                   type="tel"
                   id="memberPhone"
                   name="memberPhone"
-                  value={formData.memberPhone}
-                  onChange={handleInputChange}
-                  required
+                  value={memberUpdateInput?.memberPhone || ""}
+                  onChange={memberPhoneHandler}
                 />
               </div>
 
@@ -123,9 +232,8 @@ const MyPage: React.FC = () => {
                   type="email"
                   id="memberEmail"
                   name="memberEmail"
-                  value={formData.memberEmail}
-                  onChange={handleInputChange}
-                  required
+                  value={memberUpdateInput?.memberEmail || ""}
+                  onChange={memberEmailHandler}
                 />
               </div>
 
@@ -134,11 +242,35 @@ const MyPage: React.FC = () => {
                 <textarea
                   id="memberDescription"
                   name="memberDescription"
-                  value={formData.memberDescription}
-                  onChange={handleInputChange}
+                  value={memberUpdateInput?.memberDesc || ""}
+                  onChange={memberDescHandler}
                   rows={4}
                   placeholder="Tell us about yourself and your reading preferences..."
                 />
+              </div>
+              <div className="form-group">
+                <label htmlFor="profileImage">Profile Image</label>
+                <input
+                  type="file"
+                  id="profileImage"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setProfileFile(file);
+                      setPreviewImage(URL.createObjectURL(file));
+                    }
+                  }}
+                />
+                {previewImage && (
+                  <div className="image-preview">
+                    <img
+                      src={previewImage}
+                      alt="Preview"
+                      className="preview-img"
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="form-group">
@@ -148,8 +280,8 @@ const MyPage: React.FC = () => {
                     type={showPassword ? "text" : "password"}
                     id="memberPassword"
                     name="memberPassword"
-                    value={formData.memberPassword}
-                    onChange={handleInputChange}
+                    value={memberUpdateInput?.memberPassword || ""}
+                    onChange={memberPasswordHandler}
                     placeholder="Enter new password to change"
                   />
                   <button
@@ -163,8 +295,12 @@ const MyPage: React.FC = () => {
               </div>
 
               <div className="form-actions">
-                <button type="submit" className="save-btn">
-                  Save Changes
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="save-btn"
+                >
+                  {isSubmitting ? "Saving..." : "Save Changes"}
                 </button>
                 <button
                   type="button"
