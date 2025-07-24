@@ -4,7 +4,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import TabContext from "@mui/lab/TabContext";
-// import PausedOrders from "./PausedOrders";
+import PausedOrders from "./PausedOrders";
 // import ProcessedOrder from "./ProcessedOrders";
 // import FinishedOrder from "./FinishedOrders";
 import { setFinishedOrders, setPausedOrders, setProcessOrders } from "./slice";
@@ -109,8 +109,8 @@ export default function OrderPage() {
             <div className="orders-content">
               <TabContext value={value}>
                 <div className="tab-panels">
-                  {/* <PausedOrders setValue={setValue} />
-                  <ProcessedOrder setValue={setValue} />
+                  {value === "1" && <PausedOrders setValue={setValue} />}
+                  {/* <ProcessedOrder setValue={setValue} />
                   <FinishedOrder /> */}
                 </div>
               </TabContext>
