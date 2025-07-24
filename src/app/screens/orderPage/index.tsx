@@ -1,14 +1,23 @@
-import React, { useState, useEffect } from "react";
-import "../../../css/orderPage.css";
-import { Dispatch } from "@reduxjs/toolkit";
+import { useState, SyntheticEvent, useEffect } from "react";
+import { Container, Stack, Box, TextField } from "@mui/material";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import TabContext from "@mui/lab/TabContext";
+// import PausedOrders from "./PausedOrders";
+// import ProcessedOrder from "./ProcessedOrders";
+// import FinishedOrder from "./FinishedOrders";
 import { setFinishedOrders, setPausedOrders, setProcessOrders } from "./slice";
-import { useHistory } from "react-router-dom";
-import { useGlobals } from "../../hooks/useGlobals";
-import { serverApi } from "../../../lib/config";
-import { OrderStatus } from "../../../lib/enums/order.enum";
-import { useDispatch } from "react-redux";
 import { Order, OrderInquiry } from "../../../lib/types/order";
+import { Dispatch } from "@reduxjs/toolkit";
+import { useHistory } from "react-router-dom";
+
+import { useDispatch } from "react-redux";
+import { OrderStatus } from "../../../lib/enums/order.enum";
 import OrderService from "../../services/Order.Service";
+import { useGlobals } from "../../hooks/useGlobals";
+import "../../../css/order.css";
+import { serverApi } from "../../../lib/config";
 
 /** Redux Slice & Selector */
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -17,31 +26,12 @@ const actionDispatch = (dispatch: Dispatch) => ({
   setFinishedOrders: (data: Order[]) => dispatch(setFinishedOrders(data)),
 });
 
-interface Book {
-  id: string;
-  title: string;
-  author: string;
-  price: number;
-  image: string;
-  isbn: string;
-}
-
-// interface Order {
-
-//   orderNumber: string;
-//   books: Book[];
-//   totalPrice: number;
-//   orderDate: string;
-//   status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
-//   shippingAddress: string;
-//   estimatedDelivery?: string;
-// }
-
-const OrderPage: React.FC = () => {
+export default function OrderPage() {
   const { setPausedOrders, setProcessOrders, setFinishedOrders } =
     actionDispatch(useDispatch());
   const { orderBuilder, authMember } = useGlobals();
   const history = useHistory();
+  const [value, setValue] = useState("1");
   const [orderInquiry, setOrderInquiry] = useState<OrderInquiry>({
     page: 1,
     limit: 5,
@@ -66,333 +56,246 @@ const OrderPage: React.FC = () => {
       .catch((err) => console.log(err));
   }, [orderInquiry, orderBuilder]);
 
-  const [activeTab, setActiveTab] = useState<
-    "pending" | "processing" | "delivered"
-  >("pending");
-  const [orders, setOrders] = useState<Order[]>([]);
-
-  // useEffect(() => {
-  //   const mockOrders: Order[] = [
-  //     {
-  //       id: "1",
-  //       orderNumber: "BN2024001",
-  //       books: [
-  //         {
-  //           id: "1",
-  //           title: "The Great Gatsby",
-  //           author: "F. Scott Fitzgerald",
-  //           price: 12.99,
-  //           image: "/img/default-book.jpg",
-  //           isbn: "978-0-7432-7356-5",
-  //         },
-  //         {
-  //           id: "2",
-  //           title: "To Kill a Mockingbird",
-  //           author: "Harper Lee",
-  //           price: 14.99,
-  //           image: "/books/mockingbird.jpg",
-  //           isbn: "978-0-06-112008-4",
-  //         },
-  //       ],
-  //       totalPrice: 27.98,
-  //       orderDate: "2024-01-15",
-  //       status: "pending",
-  //       shippingAddress: "123 Reading St, Booktown, BT 12345",
-  //       estimatedDelivery: "2024-01-22",
-  //     },
-  //     {
-  //       id: "2",
-  //       orderNumber: "BN2024002",
-  //       books: [
-  //         {
-  //           id: "3",
-  //           title: "1984",
-  //           author: "George Orwell",
-  //           price: 13.99,
-  //           image: "/books/1984.jpg",
-  //           isbn: "978-0-452-28423-4",
-  //         },
-  //       ],
-  //       totalPrice: 13.99,
-  //       orderDate: "2024-01-10",
-  //       status: "processing",
-  //       shippingAddress: "123 Reading St, Booktown, BT 12345",
-  //       estimatedDelivery: "2024-01-18",
-  //     },
-  //     {
-  //       id: "3",
-  //       orderNumber: "BN2024003",
-  //       books: [
-  //         {
-  //           id: "4",
-  //           title: "Pride and Prejudice",
-  //           author: "Jane Austen",
-  //           price: 11.99,
-  //           image: "/books/pride.jpg",
-  //           isbn: "978-0-14-143951-8",
-  //         },
-  //       ],
-  //       totalPrice: 11.99,
-  //       orderDate: "2024-01-05",
-  //       status: "delivered",
-  //       shippingAddress: "123 Reading St, Booktown, BT 12345",
-  //     },
-  //   ];
-
-  //   setOrders(mockOrders);
-  // }, []);
-
-  const getFilteredOrders = () => {
-    return orders.filter((order) => {
-      switch (activeTab) {
-        case "pending":
-          return order.status === "pending";
-        case "processing":
-          return order.status === "processing" || order.status === "shipped";
-        case "delivered":
-          return order.status === "delivered";
-        default:
-          return true;
-      }
-    });
-  };
-
-  const getStatusColor = (status: Order["status"]) => {
-    switch (status) {
-      case "pending":
-        return "#f39c12";
-      case "processing":
-        return "#3498db";
-      case "shipped":
-        return "#9b59b6";
-      case "delivered":
-        return "#27ae60";
-      case "cancelled":
-        return "#e74c3c";
-      default:
-        return "#7f8c8d";
-    }
-  };
-
-  const handleCancelOrder = (orderId: string) => {
-    setOrders(
-      orders.map((order) =>
-        order._id === orderId
-          ? { ...order, status: "cancelled" as const }
-          : order
-      )
-    );
-  };
-
-  const handleReorder = (order: Order) => {
-    // Implement reorder logic
-    console.log("Reordering:", order);
+  const handleChange = (event: SyntheticEvent, newValue: string) => {
+    setValue(newValue);
   };
 
   if (!authMember) history.push("/");
 
   return (
-    <div className="order-page">
+    <div className="modern-order-page">
+      {/* Header Section */}
       <div className="order-header">
-        <h1>My Orders</h1>
-        <p>Track and manage your book orders</p>
-      </div>
-
-      <div className="order-tabs">
-        <button
-          className={`tab-button ${activeTab === "pending" ? "active" : ""}`}
-          onClick={() => setActiveTab("pending")}
-        >
-          Pending Orders
-        </button>
-        <button
-          className={`tab-button ${activeTab === "processing" ? "active" : ""}`}
-          onClick={() => setActiveTab("processing")}
-        >
-          Processing Orders
-        </button>
-        <button
-          className={`tab-button ${activeTab === "delivered" ? "active" : ""}`}
-          onClick={() => setActiveTab("delivered")}
-        >
-          Delivered Orders
-        </button>
-      </div>
-
-      <div className="order-content">
-        <div className="order-list">
-          {getFilteredOrders().length === 0 ? (
-            <div className="empty-state">
-              <div className="empty-icon">📚</div>
-              <h3>No orders found</h3>
-              <p>You haven't placed any orders in this category yet.</p>
-            </div>
-          ) : (
-            getFilteredOrders().map((order) => (
-              <div key={order._id} className="order-card">
-                <div className="order-header-info">
-                  <div className="order-number">
-                    <span className="label">Order #</span>
-                    <span className="value">BN2024001</span>
-                  </div>
-                  <div className="order-date">
-                    <span className="label">Order Date</span>
-                    <span className="value">
-                      {new Date(order.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <div className="order-status">
-                    <span
-                      className="status-badge"
-                      style={{ backgroundColor: getStatusColor(order.status) }}
-                    >
-                      {order.status?.charAt(0).toUpperCase() +
-                        order.status?.slice(1)}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="order-books">
-                  {order.productData.map((book) => (
-                    <div key={book._id} className="book-item">
-                      <div className="book-image">
-                        <img src={book?.coverImages?.[0]} alt={book.title} />
-                      </div>
-                      <div className="book-info">
-                        <h4>{book.title}</h4>
-                        <p>by {book.author}</p>
-                        <span className="isbn">ISBN: 978-0-14-143951-8</span>
-                      </div>
-                      <div className="book-price">${book.price}</div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="order-footer">
-                  <div className="order-total">
-                    <span className="total-label">Total: </span>
-                    <span className="total-amount">
-                      ${order.orderTotal.toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="order-actions">
-                    {order.status === "pending" && (
-                      <button
-                        className="cancel-btn"
-                        onClick={() => handleCancelOrder(order._id)}
-                      >
-                        Cancel Order
-                      </button>
-                    )}
-                    {order.status === "delivered" && (
-                      <button
-                        className="reorder-btn"
-                        onClick={() => handleReorder(order)}
-                      >
-                        Reorder
-                      </button>
-                    )}
-                    <button className="details-btn">View Details</button>
-                  </div>
-                </div>
-
-                <div className="delivery-info">
-                  <span className="delivery-label">Estimated Delivery: </span>
-                  <span className="delivery-date">
-                    {new Date(order.createdAt).toLocaleDateString()}
-                  </span>
-                </div>
-              </div>
-            ))
-          )}
+        <div className="header-content">
+          <h1 className="page-title">My Orders</h1>
+          <p className="page-subtitle">Track and manage your book orders</p>
         </div>
+        <div className="header-decoration">
+          <div className="floating-element element-1"></div>
+          <div className="floating-element element-2"></div>
+          <div className="floating-element element-3"></div>
+        </div>
+      </div>
 
-        <div className="order-sidebar">
-          {authMember && (
-            <div className="user-info-card">
-              <div className="user-avatar">
-                <img
-                  src={
-                    authMember?.memberImage?.startsWith("uploads/")
-                      ? `${serverApi}/${authMember.memberImage}`
-                      : `${serverApi}/uploads/members/${authMember.memberImage}`
-                  }
-                  alt="User Avatar"
+      <Container maxWidth="xl" className="main-container">
+        <div className="content-grid">
+          {/* Left Side - Orders */}
+          <div className="orders-section">
+            <div className="tabs-container">
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                className="modern-tabs"
+                variant="fullWidth"
+                TabIndicatorProps={{
+                  style: {
+                    background:
+                      "linear-gradient(45deg, #667eea 0%, #764ba2 100%)",
+                    height: "3px",
+                    borderRadius: "2px",
+                  },
+                }}
+              >
+                <Tab label="Paused Orders" value="1" className="modern-tab" />
+                <Tab
+                  label="Processed Orders"
+                  value="2"
+                  className="modern-tab"
                 />
-                <div className="user-type-badge">📖</div>
-              </div>
-              <h3>{authMember.memberNick}</h3>
-              <p className="user-type">{authMember.memberType}</p>
-              <div className="user-details">
-                <div className="detail-item">
-                  <span className="icon">📧</span>
-                  <span>{authMember.memberEmail}</span>
-                </div>
-                <div className="detail-item">
-                  <span className="icon">📞</span>
-                  <span>{authMember.memberPhone}</span>
-                </div>
-                <div className="detail-item">
-                  <span className="icon">📍</span>
-                  <span>123 Reading St, Booktown, BT 12345</span>
-                </div>
-              </div>
+                <Tab label="Finished Orders" value="3" className="modern-tab" />
+              </Tabs>
             </div>
-          )}
 
-          <div className="order-summary-card">
-            <h3>Order Summary</h3>
-            <div className="summary-stats">
-              <div className="stat-item">
-                <span className="stat-number">
-                  {orders.filter((o) => o.status === "pending").length}
-                </span>
-                <span className="stat-label">Pending</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-number">
-                  {
-                    orders.filter(
-                      (o) => o.status === "processing" || o.status === "shipped"
-                    ).length
-                  }
-                </span>
-                <span className="stat-label">Processing</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-number">
-                  {orders.filter((o) => o.status === "delivered").length}
-                </span>
-                <span className="stat-label">Delivered</span>
-              </div>
+            <div className="orders-content">
+              <TabContext value={value}>
+                <div className="tab-panels">
+                  {/* <PausedOrders setValue={setValue} />
+                  <ProcessedOrder setValue={setValue} />
+                  <FinishedOrder /> */}
+                </div>
+              </TabContext>
             </div>
           </div>
 
-          <div className="quick-actions-card">
-            <h3>Quick Actions</h3>
-            <div className="action-buttons">
-              <button className="action-btn">
-                <span className="icon">🛒</span>
-                Continue Shopping
-              </button>
-              <button className="action-btn">
-                <span className="icon">💳</span>
-                Payment Methods
-              </button>
-              <button className="action-btn">
-                <span className="icon">📍</span>
-                Shipping Addresses
-              </button>
-              <button className="action-btn">
-                <span className="icon">🎁</span>
-                Wishlist
-              </button>
+          {/* Right Side - Profile & Payment */}
+          <div className="sidebar-section">
+            {/* User Profile Card */}
+            <div className="profile-card">
+              <div className="profile-header">
+                <div className="profile-avatar-container">
+                  <div className="avatar-wrapper">
+                    <img
+                      src={
+                        authMember?.memberImage
+                          ? `${serverApi}/${authMember.memberImage}`
+                          : "/icons/default-user.svg"
+                      }
+                      className="profile-avatar"
+                      alt="User Avatar"
+                    />
+                    <div className="member-badge">
+                      <img
+                        src={"/icons/user-badge.svg"}
+                        className="badge-icon"
+                        alt="Member Badge"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="profile-info">
+                  <h3 className="profile-name">{authMember?.memberNick}</h3>
+                  <span className="profile-type">{authMember?.memberType}</span>
+                </div>
+              </div>
+
+              <div className="profile-details">
+                <div className="location-info">
+                  <LocationOnIcon className="location-icon" />
+                  <p className="location-text">
+                    {authMember?.memberAddress
+                      ? authMember.memberAddress
+                      : "Address not provided"}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Payment Card */}
+            <div className="payment-card">
+              <div className="payment-header">
+                <h3 className="payment-title">Payment Information</h3>
+                <div className="security-badge">
+                  <span className="security-text">🔒 Secured</span>
+                </div>
+              </div>
+
+              <div className="payment-form">
+                <div className="form-group">
+                  <label className="form-label">Card Number</label>
+                  <TextField
+                    className="modern-input"
+                    variant="outlined"
+                    placeholder="5243 4090 2002 7495"
+                    fullWidth
+                    InputProps={{
+                      sx: {
+                        backgroundColor: "#f8fafc",
+                        borderRadius: "12px",
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          border: "2px solid #e2e8f0",
+                        },
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          border: "2px solid #cbd5e1",
+                        },
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          border: "2px solid #667eea",
+                        },
+                      },
+                    }}
+                  />
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group half">
+                    <label className="form-label">Expiry Date</label>
+                    <TextField
+                      className="modern-input"
+                      variant="outlined"
+                      placeholder="07 / 24"
+                      fullWidth
+                      InputProps={{
+                        sx: {
+                          backgroundColor: "#f8fafc",
+                          borderRadius: "12px",
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            border: "2px solid #e2e8f0",
+                          },
+                          "&:hover .MuiOutlinedInput-notchedOutline": {
+                            border: "2px solid #cbd5e1",
+                          },
+                          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                            border: "2px solid #667eea",
+                          },
+                        },
+                      }}
+                    />
+                  </div>
+                  <div className="form-group half">
+                    <label className="form-label">CVV</label>
+                    <TextField
+                      className="modern-input"
+                      variant="outlined"
+                      placeholder="010"
+                      fullWidth
+                      InputProps={{
+                        sx: {
+                          backgroundColor: "#f8fafc",
+                          borderRadius: "12px",
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            border: "2px solid #e2e8f0",
+                          },
+                          "&:hover .MuiOutlinedInput-notchedOutline": {
+                            border: "2px solid #cbd5e1",
+                          },
+                          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                            border: "2px solid #667eea",
+                          },
+                        },
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Cardholder Name</label>
+                  <TextField
+                    className="modern-input"
+                    variant="outlined"
+                    placeholder="Justin Robertson"
+                    fullWidth
+                    InputProps={{
+                      sx: {
+                        backgroundColor: "#f8fafc",
+                        borderRadius: "12px",
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          border: "2px solid #e2e8f0",
+                        },
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          border: "2px solid #cbd5e1",
+                        },
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          border: "2px solid #667eea",
+                        },
+                      },
+                    }}
+                  />
+                </div>
+
+                <div className="payment-methods">
+                  <p className="payment-methods-label">
+                    Accepted Payment Methods
+                  </p>
+                  <div className="payment-icons">
+                    <div className="payment-icon-wrapper">
+                      <img src="./icons/western-card.svg" alt="Western Union" />
+                    </div>
+                    <div className="payment-icon-wrapper">
+                      <img src="./icons/master-card.svg" alt="MasterCard" />
+                    </div>
+                    <div className="payment-icon-wrapper">
+                      <img src="./icons/paypal-card.svg" alt="PayPal" />
+                    </div>
+                    <div className="payment-icon-wrapper">
+                      <img src="./icons/visa-card.svg" alt="Visa" />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Container>
     </div>
   );
-};
-
-export default OrderPage;
+}
