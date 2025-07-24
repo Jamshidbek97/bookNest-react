@@ -2,6 +2,7 @@ import React from "react";
 import {
   Box,
   Button,
+  Container,
   Stack,
   Chip,
   Typography,
@@ -10,98 +11,43 @@ import {
   Divider,
 } from "@mui/material";
 import TabPanel from "@mui/lab/TabPanel";
+import moment from "moment";
 import { createSelector } from "reselect";
-import { retrievePausedOrders } from "./selector";
+import { retrieveFinishedOrders } from "./selector";
 import { useSelector } from "react-redux";
-import { Order, OrderItem, OrderUpdateInput } from "../../../lib/types/order";
+import { Order, OrderItem } from "../../../lib/types/order";
 import { Book } from "../../../lib/types/product";
-import { Messages, serverApi } from "../../../lib/config";
-import { T } from "../../../lib/types/common";
-import { sweetErrorHandling } from "../../../lib/sweetAlert";
-import { OrderStatus } from "../../../lib/enums/order.enum";
-import { useGlobals } from "../../hooks/useGlobals";
-import OrderService from "../../services/Order.Service";
+import { serverApi } from "../../../lib/config";
 import {
   MenuBook,
   Close,
-  PauseCircle,
-  Add,
   ShoppingCart,
   LocalShipping,
   Receipt,
-  Cancel,
-  Payment,
   LibraryBooks,
+  CheckCircleOutline,
+  Star,
+  StarBorder,
+  RateReview,
+  Download,
+  CheckCircle,
 } from "@mui/icons-material";
 
 /** Redux slice & Selector */
-const pausedOrdersRetriever = createSelector(
-  retrievePausedOrders,
-  (pausedOrders) => ({ pausedOrders })
+const finishedOrdersRetriever = createSelector(
+  retrieveFinishedOrders,
+  (finishedOrders) => ({ finishedOrders })
 );
 
-interface PausedOrderProps {
-  setValue: (input: string) => void;
-}
-
-export default function PausedOrders(props: PausedOrderProps) {
-  const { setValue } = props;
-  const { authMember, setOrderBuilder } = useGlobals();
-  const { pausedOrders } = useSelector(pausedOrdersRetriever);
-
-  /** Handlers */
-  const deleteOrderHandler = async (e: T) => {
-    try {
-      if (!authMember) throw new Error(Messages.error2);
-      const orderId = e.target.value;
-      const input: OrderUpdateInput = {
-        orderId: orderId,
-        orderStatus: OrderStatus.DELETE,
-      };
-
-      const confirmation = window.confirm("Do you want to delete Order");
-
-      if (confirmation) {
-        const order = new OrderService();
-        await order.updateOrder(input);
-        setOrderBuilder(new Date());
-      }
-    } catch (err) {
-      console.log(err);
-      sweetErrorHandling(err).then();
-    }
-  };
-
-  const processOrderHandler = async (e: T) => {
-    try {
-      if (!authMember) throw new Error(Messages.error2);
-      // Payment Process
-      const orderId = e.target.value;
-      const input: OrderUpdateInput = {
-        orderId: orderId,
-        orderStatus: OrderStatus.PROCESS,
-      };
-
-      const confirmation = window.confirm("Do you want to Proceed Payment");
-
-      if (confirmation) {
-        const order = new OrderService();
-        await order.updateOrder(input);
-        setValue("2");
-        setOrderBuilder(new Date());
-      }
-    } catch (err) {
-      console.log(err);
-      sweetErrorHandling(err).then();
-    }
-  };
+export default function FinishedOrders() {
+  const { finishedOrders } = useSelector(finishedOrdersRetriever);
 
   return (
-    <TabPanel value="1" sx={{ padding: 0 }}>
+    <TabPanel value="3" sx={{ padding: 0 }}>
       <Box sx={{ padding: "20px 0" }}>
-        {pausedOrders && pausedOrders.length > 0 ? (
+        {finishedOrders && finishedOrders.length > 0 ? (
           <Stack spacing={3}>
-            {pausedOrders.map((order: Order) => (
+            {finishedOrders.map((order: Order) => (
               <Card
                 key={order._id}
                 sx={{
@@ -110,9 +56,19 @@ export default function PausedOrders(props: PausedOrderProps) {
                   border: "1px solid #f1f5f9",
                   overflow: "hidden",
                   transition: "all 0.3s ease",
+                  position: "relative",
                   "&:hover": {
                     transform: "translateY(-4px)",
                     boxShadow: "0 16px 48px rgba(0, 0, 0, 0.12)",
+                  },
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: "4px",
+                    background: "linear-gradient(90deg, #10b981, #059669)",
                   },
                 }}
               >
@@ -134,7 +90,7 @@ export default function PausedOrders(props: PausedOrderProps) {
                       }}
                     >
                       <ShoppingCart
-                        sx={{ color: "#f59e0b", fontSize: "24px" }}
+                        sx={{ color: "#10b981", fontSize: "24px" }}
                       />
                       <Typography
                         variant="h6"
@@ -148,18 +104,64 @@ export default function PausedOrders(props: PausedOrderProps) {
                       </Typography>
                     </Box>
                     <Chip
-                      label="Paused"
-                      icon={<PauseCircle />}
+                      label="Completed"
+                      icon={<CheckCircle />}
                       sx={{
-                        backgroundColor: "#fef3c7",
-                        color: "#92400e",
+                        backgroundColor: "#d1fae5",
+                        color: "#065f46",
                         fontWeight: 600,
                         fontSize: "0.8rem",
                         "& .MuiChip-icon": {
-                          color: "#92400e",
+                          color: "#065f46",
                         },
                       }}
                     />
+                  </Box>
+
+                  {/* Completion Status Banner */}
+                  <Box
+                    sx={{
+                      backgroundColor: "#f0fdf4",
+                      border: "1px solid #bbf7d0",
+                      borderRadius: "12px",
+                      padding: "16px",
+                      marginBottom: "24px",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                    }}
+                  >
+                    <CheckCircleOutline
+                      sx={{ color: "#10b981", fontSize: "24px" }}
+                    />
+                    <Box sx={{ flex: 1 }}>
+                      <Typography
+                        variant="subtitle2"
+                        sx={{
+                          fontWeight: 600,
+                          color: "#065f46",
+                          marginBottom: "4px",
+                        }}
+                      >
+                        Order Delivered Successfully
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: "#64748b" }}>
+                        Completed on {moment().format("MMMM DD, YYYY at HH:mm")}
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{ display: "flex", alignItems: "center", gap: "4px" }}
+                    >
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star
+                          key={star}
+                          sx={{
+                            color: star <= 4 ? "#fbbf24" : "#d1d5db",
+                            fontSize: "16px",
+                          }}
+                        />
+                      ))}
+                    </Box>
                   </Box>
 
                   {/* Order Items */}
@@ -176,7 +178,7 @@ export default function PausedOrders(props: PausedOrderProps) {
                       }}
                     >
                       <MenuBook sx={{ fontSize: "18px" }} />
-                      Books in this order
+                      Books delivered
                     </Typography>
 
                     <Stack spacing={2}>
@@ -213,11 +215,12 @@ export default function PausedOrders(props: PausedOrderProps) {
                                   width: "60px",
                                   height: "60px",
                                   borderRadius: "8px",
-                                  backgroundColor: "#667eea",
+                                  backgroundColor: "#10b981",
                                   display: "flex",
                                   alignItems: "center",
                                   justifyContent: "center",
                                   overflow: "hidden",
+                                  position: "relative",
                                 }}
                               >
                                 {imagePath ? (
@@ -243,6 +246,29 @@ export default function PausedOrders(props: PausedOrderProps) {
                                     sx={{ color: "white", fontSize: "24px" }}
                                   />
                                 )}
+                                {/* Completion checkmark */}
+                                <Box
+                                  sx={{
+                                    position: "absolute",
+                                    top: "4px",
+                                    right: "4px",
+                                    width: "16px",
+                                    height: "16px",
+                                    backgroundColor: "#059669",
+                                    borderRadius: "50%",
+                                    border: "2px solid white",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  <CheckCircle
+                                    sx={{
+                                      color: "white",
+                                      fontSize: "10px",
+                                    }}
+                                  />
+                                </Box>
                               </Box>
 
                               <Box>
@@ -263,7 +289,7 @@ export default function PausedOrders(props: PausedOrderProps) {
                                     fontSize: "0.9rem",
                                   }}
                                 >
-                                  Unit Price: ${item.itemPrice}
+                                  Unit Price: ${item.itemPrice} • Delivered
                                 </Typography>
                               </Box>
                             </Box>
@@ -306,7 +332,7 @@ export default function PausedOrders(props: PausedOrderProps) {
                                 variant="body1"
                                 sx={{
                                   fontWeight: 700,
-                                  color: "#667eea",
+                                  color: "#10b981",
                                 }}
                               >
                                 ${item.itemQuantity * item.itemPrice}
@@ -334,15 +360,15 @@ export default function PausedOrders(props: PausedOrderProps) {
                       }}
                     >
                       <Receipt sx={{ fontSize: "18px" }} />
-                      Price Breakdown
+                      Final Order Summary
                     </Typography>
 
                     <Box
                       sx={{
-                        backgroundColor: "#f8fafc",
+                        backgroundColor: "#f0fdf4",
                         padding: "20px",
                         borderRadius: "12px",
-                        border: "1px solid #e2e8f0",
+                        border: "1px solid #bbf7d0",
                       }}
                     >
                       <Stack spacing={2}>
@@ -361,11 +387,11 @@ export default function PausedOrders(props: PausedOrderProps) {
                             }}
                           >
                             <MenuBook
-                              sx={{ color: "#64748b", fontSize: "18px" }}
+                              sx={{ color: "#064e3b", fontSize: "18px" }}
                             />
                             <Typography
                               variant="body2"
-                              sx={{ color: "#64748b" }}
+                              sx={{ color: "#064e3b" }}
                             >
                               Books Total:
                             </Typography>
@@ -393,11 +419,11 @@ export default function PausedOrders(props: PausedOrderProps) {
                             }}
                           >
                             <LocalShipping
-                              sx={{ color: "#64748b", fontSize: "18px" }}
+                              sx={{ color: "#064e3b", fontSize: "18px" }}
                             />
                             <Typography
                               variant="body2"
-                              sx={{ color: "#64748b" }}
+                              sx={{ color: "#064e3b" }}
                             >
                               Delivery Cost:
                             </Typography>
@@ -423,13 +449,13 @@ export default function PausedOrders(props: PausedOrderProps) {
                             variant="subtitle1"
                             sx={{ fontWeight: 700, color: "#1e293b" }}
                           >
-                            Total Amount:
+                            Total Paid:
                           </Typography>
                           <Typography
                             variant="h6"
                             sx={{
                               fontWeight: 700,
-                              color: "#667eea",
+                              color: "#10b981",
                               fontSize: "1.3rem",
                             }}
                           >
@@ -445,50 +471,67 @@ export default function PausedOrders(props: PausedOrderProps) {
                     sx={{
                       display: "flex",
                       gap: "12px",
-                      justifyContent: "flex-end",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      backgroundColor: "#f8fafc",
+                      padding: "16px",
+                      borderRadius: "12px",
+                      border: "1px solid #e2e8f0",
                     }}
                   >
-                    <Button
-                      variant="outlined"
-                      startIcon={<Cancel />}
-                      onClick={deleteOrderHandler}
-                      value={order._id}
-                      sx={{
-                        borderColor: "#ef4444",
-                        color: "#ef4444",
-                        fontWeight: 600,
-                        padding: "10px 24px",
-                        borderRadius: "10px",
-                        textTransform: "none",
-                        "&:hover": {
-                          backgroundColor: "#fef2f2",
-                          borderColor: "#dc2626",
-                        },
-                      }}
-                    >
-                      Cancel Order
-                    </Button>
-                    <Button
-                      variant="contained"
-                      startIcon={<Payment />}
-                      onClick={processOrderHandler}
-                      value={order._id}
-                      sx={{
-                        backgroundColor: "#10b981",
-                        color: "white",
-                        fontWeight: 600,
-                        padding: "10px 24px",
-                        borderRadius: "10px",
-                        textTransform: "none",
-                        boxShadow: "0 4px 12px rgba(16, 185, 129, 0.3)",
-                        "&:hover": {
-                          backgroundColor: "#059669",
-                          boxShadow: "0 6px 20px rgba(16, 185, 129, 0.4)",
-                        },
-                      }}
-                    >
-                      Proceed to Payment
-                    </Button>
+                    <Box>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "#64748b", fontWeight: 600 }}
+                      >
+                        Order completed successfully
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: "#94a3b8" }}>
+                        Thank you for your purchase!
+                      </Typography>
+                    </Box>
+
+                    <Box sx={{ display: "flex", gap: "8px" }}>
+                      <Button
+                        variant="outlined"
+                        startIcon={<Download />}
+                        sx={{
+                          borderColor: "#10b981",
+                          color: "#10b981",
+                          fontWeight: 600,
+                          padding: "8px 16px",
+                          borderRadius: "8px",
+                          textTransform: "none",
+                          fontSize: "0.85rem",
+                          "&:hover": {
+                            backgroundColor: "#f0fdf4",
+                            borderColor: "#059669",
+                          },
+                        }}
+                      >
+                        Receipt
+                      </Button>
+                      <Button
+                        variant="contained"
+                        startIcon={<RateReview />}
+                        sx={{
+                          backgroundColor: "#10b981",
+                          color: "white",
+                          fontWeight: 600,
+                          padding: "8px 16px",
+                          borderRadius: "8px",
+                          textTransform: "none",
+                          fontSize: "0.85rem",
+                          boxShadow: "0 4px 12px rgba(16, 185, 129, 0.3)",
+                          "&:hover": {
+                            backgroundColor: "#059669",
+                            boxShadow: "0 6px 20px rgba(16, 185, 129, 0.4)",
+                          },
+                        }}
+                      >
+                        Write Review
+                      </Button>
+                    </Box>
                   </Box>
                 </CardContent>
               </Card>
@@ -510,17 +553,17 @@ export default function PausedOrders(props: PausedOrderProps) {
                 width: "120px",
                 height: "120px",
                 borderRadius: "50%",
-                backgroundColor: "#f1f5f9",
+                backgroundColor: "#f0fdf4",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 marginBottom: "24px",
               }}
             >
-              <PauseCircle
+              <CheckCircleOutline
                 sx={{
                   fontSize: "60px",
-                  color: "#94a3b8",
+                  color: "#10b981",
                 }}
               />
             </Box>
@@ -532,7 +575,7 @@ export default function PausedOrders(props: PausedOrderProps) {
                 marginBottom: "8px",
               }}
             >
-              No Paused Orders
+              No Completed Orders Yet
             </Typography>
             <Typography
               variant="body2"
@@ -542,8 +585,8 @@ export default function PausedOrders(props: PausedOrderProps) {
                 lineHeight: 1.6,
               }}
             >
-              You don't have any paused orders at the moment. Orders will appear
-              here when you pause them during checkout.
+              Your successfully delivered orders will appear here. Complete your
+              first purchase to see your order history!
             </Typography>
           </Box>
         )}

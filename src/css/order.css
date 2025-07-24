@@ -3,6 +3,7 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   position: relative;
   overflow-x: hidden;
+  margin-bottom: 10px;
 }
 
 .order-header {
@@ -356,5 +357,14 @@
   .form-row {
     flex-direction: column;
     gap: 20px;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

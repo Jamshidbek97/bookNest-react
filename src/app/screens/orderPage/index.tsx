@@ -5,8 +5,8 @@ import Tab from "@mui/material/Tab";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import TabContext from "@mui/lab/TabContext";
 import PausedOrders from "./PausedOrders";
-// import ProcessedOrder from "./ProcessedOrders";
-// import FinishedOrder from "./FinishedOrders";
+import ProcessedOrder from "./ProcessedOrders";
+import FinishedOrder from "./FinishedOrders";
 import { setFinishedOrders, setPausedOrders, setProcessOrders } from "./slice";
 import { Order, OrderInquiry } from "../../../lib/types/order";
 import { Dispatch } from "@reduxjs/toolkit";
@@ -110,8 +110,9 @@ export default function OrderPage() {
               <TabContext value={value}>
                 <div className="tab-panels">
                   {value === "1" && <PausedOrders setValue={setValue} />}
-                  {/* <ProcessedOrder setValue={setValue} />
-                  <FinishedOrder /> */}
+                  {value === "2" && <ProcessedOrder setValue={setValue} />}
+                  {value === "3" && <FinishedOrder />}
+                  {/* <FinishedOrder />  */}
                 </div>
               </TabContext>
             </div>

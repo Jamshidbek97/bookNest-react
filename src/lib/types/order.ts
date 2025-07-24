@@ -29,7 +29,7 @@ export interface Order {
   status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
   //   from aggregation
   orderItems: OrderItem[];
-  productData: Book[];
+  bookData: Book[];
 }
 
 export interface OrderInquiry {
