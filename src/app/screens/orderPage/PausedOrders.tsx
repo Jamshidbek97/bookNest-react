@@ -22,7 +22,7 @@ import { OrderStatus } from "../../../lib/enums/order.enum";
 import { useGlobals } from "../../hooks/useGlobals";
 import OrderService from "../../services/Order.Service";
 import {
-  MenuBook,
+  Menu,
   Close,
   PauseCircle,
   Add,
@@ -175,7 +175,7 @@ export default function PausedOrders(props: PausedOrderProps) {
                         gap: "8px",
                       }}
                     >
-                      <MenuBook sx={{ fontSize: "18px" }} />
+                      <Menu sx={{ fontSize: "18px" }} />
                       Books in this order
                     </Typography>
 
@@ -360,7 +360,7 @@ export default function PausedOrders(props: PausedOrderProps) {
                               gap: "8px",
                             }}
                           >
-                            <MenuBook
+                            <Menu
                               sx={{ color: "#64748b", fontSize: "18px" }}
                             />
                             <Typography

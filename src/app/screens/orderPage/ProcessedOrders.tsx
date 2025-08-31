@@ -23,13 +23,13 @@ import { OrderStatus } from "../../../lib/enums/order.enum";
 import OrderService from "../../services/Order.Service";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import {
-  MenuBook,
+  Menu,
   Close,
   ShoppingCart,
   LocalShipping,
   Receipt,
   LibraryBooks,
-  AccessTime,
+  Schedule,
   CheckCircle,
   Sync,
   VerifiedUser,
@@ -165,7 +165,7 @@ export default function ProcessedOrders(props: ProcessOrderProps) {
                       gap: "12px",
                     }}
                   >
-                    <AccessTime sx={{ color: "#3b82f6", fontSize: "20px" }} />
+                    <Schedule sx={{ color: "#3b82f6", fontSize: "20px" }} />
                     <Box>
                       <Typography
                         variant="subtitle2"
@@ -196,7 +196,7 @@ export default function ProcessedOrders(props: ProcessOrderProps) {
                         gap: "8px",
                       }}
                     >
-                      <MenuBook sx={{ fontSize: "18px" }} />
+                      <Menu sx={{ fontSize: "18px" }} />
                       Books in this order
                     </Typography>
 
@@ -395,7 +395,7 @@ export default function ProcessedOrders(props: ProcessOrderProps) {
                               gap: "8px",
                             }}
                           >
-                            <MenuBook
+                            <Menu
                               sx={{ color: "#64748b", fontSize: "18px" }}
                             />
                             <Typography
@@ -494,7 +494,7 @@ export default function ProcessedOrders(props: ProcessOrderProps) {
                         gap: "12px",
                       }}
                     >
-                      <AccessTime sx={{ color: "#0ea5e9", fontSize: "20px" }} />
+                      <Schedule sx={{ color: "#0ea5e9", fontSize: "20px" }} />
                       <Box>
                         <Typography
                           variant="body2"

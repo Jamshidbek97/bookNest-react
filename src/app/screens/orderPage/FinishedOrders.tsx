@@ -19,7 +19,7 @@ import { Order, OrderItem } from "../../../lib/types/order";
 import { Book } from "../../../lib/types/product";
 import { serverApi } from "../../../lib/config";
 import {
-  MenuBook,
+  Menu,
   Close,
   ShoppingCart,
   LocalShipping,
@@ -177,7 +177,7 @@ export default function FinishedOrders() {
                         gap: "8px",
                       }}
                     >
-                      <MenuBook sx={{ fontSize: "18px" }} />
+                      <Menu sx={{ fontSize: "18px" }} />
                       Books delivered
                     </Typography>
 
@@ -386,7 +386,7 @@ export default function FinishedOrders() {
                               gap: "8px",
                             }}
                           >
-                            <MenuBook
+                            <Menu
                               sx={{ color: "#064e3b", fontSize: "18px" }}
                             />
                             <Typography
