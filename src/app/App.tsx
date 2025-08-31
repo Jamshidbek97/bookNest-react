@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Switch, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import HomeNavbar from "./components/headers/HomeNavbar";
 import Footer from "./components/footer";
 import OtherNavbar from "./components/headers/OtherNavbar";
@@ -76,26 +76,14 @@ function App() {
           handleLogoutRequest={handleLogoutRequest}
         />
       )}
-      <Switch>
-        <Route path="/products">
-          <ProductsPage onAdd={onAdd} />
-        </Route>
-        <Route path="/product/:productId">
-          <ProductDetail onAdd={onAdd} />
-        </Route>
-        <Route path="/orders">
-          <OrderPage />
-        </Route>
-        <Route path="/member-page">
-          <MyPage />
-        </Route>
-        <Route path="/help">
-          <HelpPage />
-        </Route>
-        <Route path="/">
-          <HomePage onAdd={onAdd} />
-        </Route>
-      </Switch>
+      <Routes>
+        <Route path="/products/*" element={<ProductsPage onAdd={onAdd} />} />
+        <Route path="/product/:productId" element={<ProductDetail onAdd={onAdd} />} />
+        <Route path="/orders" element={<OrderPage />} />
+        <Route path="/member-page" element={<MyPage />} />
+        <Route path="/help" element={<HelpPage />} />
+        <Route path="/" element={<HomePage onAdd={onAdd} />} />
+      </Routes>
       <Footer />
       {modalOpen && (
         <AuthenticationModal
