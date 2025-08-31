@@ -7,13 +7,13 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-} from "@material-ui/core";
+} from "@mui/material";
 import {
   HelpOutline,
   Search,
   Email,
   Phone,
-  AccessTime,
+  Schedule,
 } from "@mui/icons-material";
 import { faq } from "../../../lib/data/faq";
 import { terms } from "../../../lib/data/terms";
@@ -126,7 +126,7 @@ export default function HelpPage() {
                       <Phone className="contact-icon" /> +1 (555) 123-4567
                     </div>
                     <div className="contact-item">
-                      <AccessTime className="contact-icon" /> Mon-Fri: 9AM-6PM
+                      <Schedule className="contact-icon" /> Mon-Fri: 9AM-6PM
                     </div>
                   </div>
 

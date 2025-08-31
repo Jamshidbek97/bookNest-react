@@ -1,4 +1,4 @@
-import { createTheme, PaletteMode, Theme } from "@mui/material/styles";
+import { createTheme, Theme } from "@mui/material/styles";
 import { common } from "@mui/material/colors";
 
 const baseTheme = {
@@ -59,7 +59,7 @@ const baseTheme = {
 const light = {
   ...baseTheme,
   palette: {
-    mode: "light" as PaletteMode,
+    mode: "light" as const,
     background: {
       default: "#f8f9fa",
       paper: common.white,
