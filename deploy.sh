@@ -6,10 +6,9 @@ git checkout master
 git pull origin master
 
 npm i yarn -g
-yarn global add server
 yarn
 yarn run build
-pm2 start serve --name BOOKNEST_REACT -- -s build -l 80
+pm2 start ecosystem.config.js
 
 
 #development
