@@ -31,7 +31,7 @@ import {
   PersonAdd,
   Edit as EditIcon,
 } from "@mui/icons-material";
-import { LoginInput, MemberInput } from "../../../lib/types/member";
+import { LoginInput } from "../../../lib/types/member";
 import { useGlobals } from "../../hooks/useGlobals";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import MemberService from "../../services/MemberService";
@@ -431,12 +431,12 @@ const AuthenticationModal: React.FC<AuthModalProps> = ({
 
                   {/* Form Fields */}
                   <Stack spacing={2.5}>
-                    {/* Username */}
+                   
                     <TextField
                       fullWidth
                       label="Username"
                       value={formData.username}
-                      onChange={(e) =>
+                      onChange={(e: any) =>
                         handleInputChange("username", e.target.value)
                       }
                       onKeyDown={handleKeyDown}
@@ -459,7 +459,7 @@ const AuthenticationModal: React.FC<AuthModalProps> = ({
                         label="Email Address"
                         type="email"
                         value={formData.email}
-                        onChange={(e) =>
+                        onChange={(e: any) =>
                           handleInputChange("email", e.target.value)
                         }
                         onKeyDown={handleKeyDown}
@@ -482,7 +482,7 @@ const AuthenticationModal: React.FC<AuthModalProps> = ({
                         fullWidth
                         label="Phone Number"
                         value={formData.phone}
-                        onChange={(e) =>
+                        onChange={(e: any) =>
                           handleInputChange("phone", e.target.value)
                         }
                         onKeyDown={handleKeyDown}
@@ -505,7 +505,7 @@ const AuthenticationModal: React.FC<AuthModalProps> = ({
                       label="Password"
                       type={showPassword ? "text" : "password"}
                       value={formData.password}
-                      onChange={(e) =>
+                      onChange={(e: any) =>
                         handleInputChange("password", e.target.value)
                       }
                       onKeyDown={handleKeyDown}
@@ -542,7 +542,7 @@ const AuthenticationModal: React.FC<AuthModalProps> = ({
                         label="Confirm Password"
                         type={showConfirmPassword ? "text" : "password"}
                         value={formData.confirmPassword}
-                        onChange={(e) =>
+                        onChange={(e: any) =>
                           handleInputChange("confirmPassword", e.target.value)
                         }
                         onKeyDown={handleKeyDown}

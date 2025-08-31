@@ -10,6 +10,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "./app/MaterialTheme";
 import ContextProvider from "./app/context/ContextProvider";
 import "./css/index.css";
+import { SocketProvider } from "./app/context/SocketContext";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
@@ -18,13 +19,15 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <ContextProvider>
-        <ThemeProvider theme={theme}>
-          <CssBaseline>
-            <Router>
-              <App />
-            </Router>
-          </CssBaseline>
-        </ThemeProvider>
+        <SocketProvider>
+          <ThemeProvider theme={theme}>
+            <CssBaseline>
+              <Router>
+                <App />
+              </Router>
+            </CssBaseline>
+          </ThemeProvider>
+        </SocketProvider>
       </ContextProvider>
     </Provider>
   </React.StrictMode>

@@ -19,7 +19,7 @@ const actionDispatch = (dispatch: Dispatch) => ({
 
 const productDetailRetriever = createSelector(
   retrieveChosenProduct,
-  (chosenProduct) => ({
+  (chosenProduct: any) => ({
     chosenProduct,
   })
 );
@@ -31,17 +31,20 @@ interface DetailProps {
 export default function ProductDetail(props: DetailProps) {
   const { onAdd } = props;
   const { productId } = useParams<{ productId: string }>();
-  const { setProductDetail } = actionDispatch(useDispatch());
+  const dispatch = useDispatch();
+  const { setProductDetail } = actionDispatch(dispatch);
 
-  const { chosenProduct } = useSelector(productDetailRetriever);
+  const chosenProduct = useSelector(retrieveChosenProduct);
 
   useEffect(() => {
-    const product = new ProductService();
-    product
-      .getProduct(productId)
-      .then((data) => setProductDetail(data))
-      .catch((err) => console.log("Error: ", err));
-  }, []);
+    if (productId) {
+      const product = new ProductService();
+      product
+        .getProduct(productId)
+        .then((data) => setProductDetail(data))
+        .catch((err) => console.log("Error: ", err));
+    }
+  }, [productId]);
 
   return (
     <Box className="d-products product-detail">
