@@ -5,7 +5,7 @@ import {
   CardContent,
   Typography,
   IconButton,
-} from "@material-ui/core";
+} from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 import { serverApi } from "../../../lib/config";
 import { Book } from "../../../lib/types/product";
 import { CartItem } from "../../../lib/types/search";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 /*********** REDUX SLICE AND SELECTOR ***********/
 const popularBooksRetriever = createSelector(
@@ -31,7 +31,7 @@ export default function PopularBooks(props: PopularProductsProps) {
   const { onAdd } = props;
   const { popularBooks } = useSelector(popularBooksRetriever);
 
-  const history = useHistory();
+  const navigate = useNavigate();
   return (
     <Box className="popular-books">
       <Typography
@@ -53,7 +53,7 @@ export default function PopularBooks(props: PopularProductsProps) {
               className="book-card-popular"
               key={book._id}
               elevation={5}
-              onClick={() => history.push(`/product/${book._id}`)}
+              onClick={() => navigate(`/product/${book._id}`)}
             >
               <Box position="relative">
                 <CardMedia

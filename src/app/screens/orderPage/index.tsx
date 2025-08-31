@@ -10,7 +10,7 @@ import FinishedOrder from "./FinishedOrders";
 import { setFinishedOrders, setPausedOrders, setProcessOrders } from "./slice";
 import { Order, OrderInquiry } from "../../../lib/types/order";
 import { Dispatch } from "@reduxjs/toolkit";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { OrderStatus } from "../../../lib/enums/order.enum";
@@ -30,7 +30,7 @@ export default function OrderPage() {
   const { setPausedOrders, setProcessOrders, setFinishedOrders } =
     actionDispatch(useDispatch());
   const { orderBuilder, authMember } = useGlobals();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [value, setValue] = useState("1");
   const [orderInquiry, setOrderInquiry] = useState<OrderInquiry>({
     page: 1,
@@ -60,7 +60,7 @@ export default function OrderPage() {
     setValue(newValue);
   };
 
-  if (!authMember) history.push("/");
+  if (!authMember) navigate("/");
 
   return (
     <div className="modern-order-page">
@@ -127,9 +127,9 @@ export default function OrderPage() {
                   <div className="avatar-wrapper">
                     <img
                       src={
-                        authMember?.memberImage
+                        authMember?.memberImage?.startsWith("uploads/")
                           ? `${serverApi}/${authMember.memberImage}`
-                          : "/icons/default-user.svg"
+                          : `${serverApi}/uploads/members/${authMember?.memberImage}`
                       }
                       className="profile-avatar"
                       alt="User Avatar"

@@ -1,10 +1,10 @@
 import { Box, Typography, Stack } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation, Pagination } from "swiper";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import ScheduleIcon from "@mui/icons-material/Schedule";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { createSelector } from "reselect";
 import { retrieveAlsoLike } from "./selector";
@@ -13,7 +13,7 @@ import { serverApi } from "../../../lib/config";
 
 import { Book } from "../../../lib/types/product";
 
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 /*********** REDUX SLICE AND SELECTOR ***********/
 
@@ -25,7 +25,7 @@ const recommendationRetriever = createSelector(
 export default function Recommendations() {
   const { alsoLike } = useSelector(recommendationRetriever);
 
-  const history = useHistory();
+  const navigate = useNavigate();
   return (
     <div className="events-frame">
       <Stack className="events-main">
@@ -58,7 +58,7 @@ export default function Recommendations() {
             {alsoLike.map((value: Book, index) => (
               <SwiperSlide
                 key={index}
-                onClick={() => history.push(`/product/${value._id}`)}
+                onClick={() => navigate(`/product/${value._id}`)}
               >
                 <div className="events-card">
                   <div className="events-img-wrapper">
@@ -87,7 +87,7 @@ export default function Recommendations() {
 
                     <Box className="bott-info">
                       <Box className="bott-info-main">
-                        <AccessTimeIcon fontSize="small" />
+                        <ScheduleIcon fontSize="small" />
 
                         <span>
                           {/* {new Date(value.createdAt).toLocaleDateString(

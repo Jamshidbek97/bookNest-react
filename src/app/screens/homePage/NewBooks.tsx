@@ -6,7 +6,7 @@ import {
   CardContent,
   Typography,
   IconButton,
-} from "@material-ui/core";
+} from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -15,7 +15,7 @@ import { createSelector } from "reselect";
 import { retrieveNewBooks } from "./selector";
 import { serverApi } from "../../../lib/config";
 import { CartItem } from "../../../lib/types/search";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 /*********** REDUX SLICE AND SELECTOR ***********/
 const newBooksRetriever = createSelector(retrieveNewBooks, (newBooks) => ({
@@ -30,7 +30,7 @@ export default function NewBooks(props: NewProductsProps) {
   const { onAdd } = props;
   const { newBooks } = useSelector(newBooksRetriever);
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <Box className="new-books">
@@ -53,7 +53,7 @@ export default function NewBooks(props: NewProductsProps) {
               style={{ cursor: "pointer" }}
               key={book._id}
               elevation={4}
-              onClick={() => history.push(`/product/${book._id}`)}
+              onClick={() => navigate(`/product/${book._id}`)}
             >
               <Box position="relative">
                 <CardMedia

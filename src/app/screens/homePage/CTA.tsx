@@ -1,11 +1,11 @@
 import { Box, Typography, Button, Container, Stack } from "@mui/material";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function CallToAction() {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleExplore = () => {
-    history.push("/products");
+    navigate("/products");
   };
 
   return (

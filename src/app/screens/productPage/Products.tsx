@@ -8,7 +8,7 @@ import { createSelector } from "reselect";
 import { CartItem } from "../../../lib/types/search";
 import { useDispatch, useSelector } from "react-redux";
 import { BookGenre } from "../../../lib/enums/book.enum";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ProductService from "../../services/Product.Service";
 import { serverApi } from "../../../lib/config";
 import Pagination from "@mui/material/Pagination";
@@ -45,7 +45,7 @@ export default function Products(props: ProductsProps) {
   });
 
   const [searchText, setSearchText] = useState("");
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const product = new ProductService();
@@ -199,7 +199,7 @@ export default function Products(props: ProductsProps) {
               return (
                 <div
                   key={book._id}
-                  onClick={() => history.push(`/product/${book._id}`)}
+                  onClick={() => navigate(`/product/${book._id}`)}
                   style={{ cursor: "pointer" }}
                   className="book-card"
                 >

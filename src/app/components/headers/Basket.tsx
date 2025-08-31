@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../../../css/basket.css";
 import { useGlobals } from "../../hooks/useGlobals";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
 import { Messages } from "../../../lib/config";
 import OrderService from "../../services/Order.Service";
@@ -20,7 +20,7 @@ export default function Basket(props: BasketProps) {
   // TODO:
   const { authMember, setOrderBuilder } = useGlobals();
   const [isOpen, setIsOpen] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   // const mockCartItems: CartItem[] = [
   //   {
@@ -98,7 +98,7 @@ export default function Basket(props: BasketProps) {
       onDeleteAll();
 
       setOrderBuilder(new Date());
-      history.push("/orders");
+      navigate("/orders");
     } catch (error) {
       console.log(error);
       sweetErrorHandling(error).then();
@@ -138,7 +138,7 @@ export default function Basket(props: BasketProps) {
                   <div className="empty-message">Your cart is empty</div>
                   <button
                     className="browse-btn"
-                    onClick={() => history.push("/products")}
+                    onClick={() => navigate("/products")}
                   >
                     Browse Books
                   </button>

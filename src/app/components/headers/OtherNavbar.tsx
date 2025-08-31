@@ -8,14 +8,14 @@ import {
   Switch,
   FormControlLabel,
 } from "@mui/material";
-import { NavLink, useHistory } from "react-router-dom";
-import MenuBookIcon from "@mui/icons-material/MenuBook";
+import { NavLink, useNavigate } from "react-router-dom";
+import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import PersonIcon from "@mui/icons-material/Person";
 import LoginIcon from "@mui/icons-material/Login";
-import Brightness4Icon from "@mui/icons-material/Brightness4";
-import Brightness7Icon from "@mui/icons-material/Brightness7";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
 import { useEffect, useRef, useState } from "react";
 import Basket from "./Basket";
 import { CartItem } from "../../../lib/types/search";
@@ -36,7 +36,7 @@ interface OtherNavbarProps {
 }
 
 export default function OtherNavbar(props: OtherNavbarProps) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { authMember } = useGlobals();
   const [darkMode, setDarkMode] = useState(false);
   const [open, setOpen] = useState(false);
@@ -136,22 +136,22 @@ export default function OtherNavbar(props: OtherNavbarProps) {
             className="links"
           >
             <StyledNavLink to="/">
-              <MenuBookIcon fontSize="small" /> Home
+              <MenuIcon fontSize="small" /> Home
             </StyledNavLink>
-            <StyledNavLink to="/products" activeClassName="underline">
+            <StyledNavLink to="/products" className={({ isActive }: { isActive: boolean }) => isActive ? "underline" : ""}>
               <ShoppingCartIcon fontSize="small" /> Browse
             </StyledNavLink>
             {authMember && (
               <>
-                <StyledNavLink to="/orders" activeClassName="underline">
+                <StyledNavLink to="/orders" className={({ isActive }: { isActive: boolean }) => isActive ? "underline" : ""}>
                   <ShoppingCartIcon fontSize="small" /> Orders
                 </StyledNavLink>
-                <StyledNavLink to="/member-page" activeClassName="underline">
+                <StyledNavLink to="/member-page" className={({ isActive }: { isActive: boolean }) => isActive ? "underline" : ""}>
                   <PersonIcon fontSize="small" /> Account
                 </StyledNavLink>
               </>
             )}
-            <StyledNavLink to="/help" activeClassName="underline">
+            <StyledNavLink to="/help" className={({ isActive }: { isActive: boolean }) => isActive ? "underline" : ""}>
               <SupportAgentIcon fontSize="small" /> Support
             </StyledNavLink>
             {authMember && (
@@ -171,7 +171,7 @@ export default function OtherNavbar(props: OtherNavbarProps) {
                   color="default"
                 />
               }
-              label={darkMode ? <Brightness4Icon /> : <Brightness7Icon />}
+              label={darkMode ? <DarkModeIcon /> : <LightModeIcon />}
               labelPlacement="start"
             />
             {!authMember ? (

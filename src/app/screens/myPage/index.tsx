@@ -9,7 +9,7 @@ import {
   sweetErrorHandling,
   sweetTopSuccessAlert,
 } from "../../../lib/sweetAlert";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface MemberData {
   memberNick: string;
@@ -139,9 +139,9 @@ const MyPage: React.FC = () => {
     }
   };
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
-  if (!authMember) history.push("/home");
+  if (!authMember) navigate("/home");
 
   return (
     <div className="mypage-container">
